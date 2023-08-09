@@ -1,7 +1,7 @@
 # Проект «Большое путешествие»
 
 * Студент: [Ольга Мамонова](https://up.htmlacademy.ru/ecmascript/21/user/2065299).
-* Наставник: [Вячеслав Луханин] (https://htmlacademy.ru/profile/id1109115).
+* Наставник: [Юлия Волкова](https://htmlacademy.ru/profile/id423707).
 
 ---
 
