@@ -1,4 +1,5 @@
 const POINT_COUNT = 3;
+const OFFER_COUNT = 7;
 
 const CITIES = [ 'Chamonix', 'Amsterdam', 'Geneva', 'Moscow', 'Berlin', 'London', 'Tokio', 'Madrid', 'Barcelona', ];
 
@@ -11,4 +12,4 @@ const Price = {
 
 const TYPES = [ 'Taxi', 'Bus', 'Train', 'Ship', 'Drive', 'Flight', 'Check-in', 'Sightseeing', 'Restaurant'];
 
-export { POINT_COUNT, CITIES, DESCRIPTION, Price, TYPES, };
+export { POINT_COUNT, CITIES, DESCRIPTION, Price, TYPES, OFFER_COUNT };
