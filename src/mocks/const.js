@@ -10,6 +10,6 @@ const Price = {
   MAX: 1000,
 };
 
-const TYPES = [ 'Taxi', 'Bus', 'Train', 'Ship', 'Drive', 'Flight', 'Check-in', 'Sightseeing', 'Restaurant'];
+const TYPES = ['Taxi', 'Bus', 'Train', 'Ship', 'Drive', 'Flight', 'Check-in', 'Sightseeing', 'Restaurant'];
 
 export { POINT_COUNT, CITIES, DESCRIPTION, Price, TYPES, OFFER_COUNT };

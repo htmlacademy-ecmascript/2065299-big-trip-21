@@ -1,45 +1,18 @@
-import { getRandomInRange, generateDate, getRandomArrayElement, getDateToHumanize } from '../utils';
-import { TYPES, Price, CITIES, DESCRIPTION, OFFER_COUNT } from './const';
+import { getRandomInRange, generateDate, getDateToString } from '../utils';
+import { Price } from './const';
 
-function generateDestination() {
-  const city = getRandomArrayElement(CITIES);
-
-  return {
-    id: crypto.randomUUID(),
-    description: DESCRIPTION,
-    name: city,
-    pictures: [
-      {
-        'src': 'https://loremflickr.com/248/152?random=crypto.randomUUID()',
-        'description': `${city} description`,
-      }
-    ]
-  };
-}
-
-function generateOffer(type) {
-  return {
-    id: crypto.randomUUID(),
-    title: `Offer ${type}`,
-    price: getRandomInRange(Price.MIN, (Price.MAX / 10)),
-  };
-}
-
-
-function getPoint() {
-  const type = getRandomArrayElement(TYPES);
+function generatePoint(type, destinationId, offerIds) {
 
   return {
     id: crypto.randomUUID(),
     basePrice: getRandomInRange(Price.MIN, Price.MAX),
-    dateFrom: getDateToHumanize(),
+    dateFrom: getDateToString(),
     dateTo: generateDate(),
-    destination: generateDestination(),
+    destination: destinationId,
     isFavorite: getRandomInRange(0, 1),
-    type: type,
-    offers: Array.from({length: getRandomInRange(1, OFFER_COUNT)}, generateOffer),
+    type,
+    offers: offerIds,
   };
 }
 
-
-export { getPoint };
+export { generatePoint };

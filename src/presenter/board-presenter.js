@@ -4,13 +4,15 @@ import EventEditView from '../view/event-edit-view';
 import PointView from '../view/point-view';
 import { render } from '../render';
 
-const POINT_COUNT = 3;
-
 export default class BoardPresenter {
   eventListComponent = new EventsListView();
 
-  constructor({boardContainer}) {
+  constructor({boardContainer, destinationsModel, offersModel, pointsModel}) {
     this.boardContainer = boardContainer;
+    this.destinationsModel = destinationsModel;
+    this.offersModel = offersModel;
+    this.pointsModel = pointsModel;
+    this.points = [...this.pointsModel.get()];
   }
 
   init() {
@@ -18,8 +20,8 @@ export default class BoardPresenter {
     render(this.eventListComponent, this.boardContainer);
     render(new EventEditView(), this.eventListComponent.getElement());
 
-    for (let i = 0; i < POINT_COUNT; i++) {
-      render(new PointView, this.eventListComponent.getElement());
+    for (let i = 0; i < this.points.length; i++) {
+      render(new PointView({point: this.points[i]}), this.eventListComponent.getElement());
     }
   }
 }
