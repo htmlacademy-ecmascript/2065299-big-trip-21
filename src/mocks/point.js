@@ -1,4 +1,4 @@
-import { getRandomInRange, generateDate, getDateToString } from '../utils';
+import { getRandomInRange, generateDate, getCurrentDate } from '../utils';
 import { Price } from './const';
 
 function generatePoint(type, destinationId, offerIds) {
@@ -6,7 +6,7 @@ function generatePoint(type, destinationId, offerIds) {
   return {
     id: crypto.randomUUID(),
     basePrice: getRandomInRange(Price.MIN, Price.MAX),
-    dateFrom: getDateToString(),
+    dateFrom: getCurrentDate(),
     dateTo: generateDate(),
     destination: destinationId,
     isFavorite: getRandomInRange(0, 1),

@@ -1,4 +1,5 @@
 import { getRandomArrayElement } from '../utils';
+import { getRandomInRange } from '../utils';
 import { CITIES, DESCRIPTION } from './const';
 
 function generateDestination() {
@@ -6,7 +7,7 @@ function generateDestination() {
 
   return {
     id: crypto.randomUUID(),
-    description: DESCRIPTION,
+    description: DESCRIPTION.slice(0, getRandomInRange(1, DESCRIPTION.length)).join(' '),
     name: city,
     pictures: [
       {
