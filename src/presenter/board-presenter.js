@@ -30,8 +30,8 @@ export default class BoardPresenter {
       render(
         new PointView({
           point,
-          pointDestination: this.destination.getById(this.points[0].destination),
-          pointOffers: this.offers.getByType(this.points[0].type)
+          pointDestination: this.destination.getById(point.destination),
+          pointOffers: this.offers.getByType(point.type)
         }), this.eventListComponent.getElement()
       );
     });

@@ -3,9 +3,9 @@ import { generateOffer } from '../mocks/offer';
 import { generatePoint } from '../mocks/point';
 
 import { getRandomArrayElement, getRandomInRange } from '../utils';
-import { TYPES, POINT_COUNT, OFFER_COUNT } from '../mocks/const';
+import { TYPES, POINT_COUNT, OFFER_COUNT, CITIES } from '../mocks/const';
 
-const DESTINATION_COUNT = 1;
+const destinationCount = getRandomInRange(1, CITIES.length);
 
 export default class MockService {
   destinations = [];
@@ -31,7 +31,7 @@ export default class MockService {
   }
 
   generateDestinations() {
-    return Array.from({length: DESTINATION_COUNT}, () => generateDestination()
+    return Array.from({length: destinationCount}, () => generateDestination()
     );
   }
 

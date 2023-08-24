@@ -1,12 +1,12 @@
-import { getRandomInRange } from '../utils';
-import { Price } from './const';
+import { getRandomInRange, getRandomArrayElement } from '../utils';
+import { PRICE, OFFERS } from './const';
 
-function generateOffer(type) {
+function generateOffer() {
 
   return {
     id: crypto.randomUUID(),
-    title: `Offer ${type}`,
-    price: getRandomInRange(Price.MIN, (Price.MAX / 10)),
+    title: getRandomArrayElement(OFFERS),
+    price: getRandomInRange(PRICE.MIN, (PRICE.MAX / 10)),
   };
 }
 

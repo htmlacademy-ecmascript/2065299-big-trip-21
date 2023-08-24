@@ -2,7 +2,8 @@ import { createElement } from '../render';
 import { formatToFullDate } from '../utils';
 
 function createEventEditTemplate({ point, pointDestination, pointOffers }) {
-  const { type } = point;
+  const { type, dateFrom, dateTo, basePrice } = point;
+  const { name, pictures, description } = pointDestination;
 
   return /*html*/ `
     <li class="trip-events__item">
@@ -71,7 +72,7 @@ function createEventEditTemplate({ point, pointDestination, pointOffers }) {
             <label class="event__label  event__type-output" for="event-destination-1">
               ${type}
             </label>
-            <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${pointDestination.name}" list="destination-list-1">
+            <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${name}" list="destination-list-1">
             <datalist id="destination-list-1">
               <option value="Amsterdam"></option>
               <option value="Geneva"></option>
@@ -81,15 +82,15 @@ function createEventEditTemplate({ point, pointDestination, pointOffers }) {
 
           <div class="event__field-group  event__field-group--time">
             <label class="visually-hidden" for="event-start-time-1">From</label>
-            <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${formatToFullDate(point.dateFrom)}">
+            <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${formatToFullDate(dateFrom)}">
             &mdash;
             <label class="visually-hidden" for="event-end-time-1">To</label>
-            <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${formatToFullDate(point.dateTo)}">
+            <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${formatToFullDate(dateTo)}">
           </div>
 
           <div class="event__field-group  event__field-group--price">
             <label class="event__label" for="event-price-1">
-              <span class="visually-hidden">${point.basePrice}</span>
+              <span class="visually-hidden">${basePrice}</span>
               &euro;
             </label>
             <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="">
@@ -117,11 +118,12 @@ function createEventEditTemplate({ point, pointDestination, pointOffers }) {
 
           <section class="event__section  event__section--destination">
             <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-            <p class="event__destination-description">${pointDestination.name} ${pointDestination.description}</p>
+            <p class="event__destination-description">${name} ${description}</p>
 
             <div class="event__photos-container">
               <div class="event__photos-tape">
-                <img class="event__photo" src="${pointDestination.pictures.src}" alt="${pointDestination.pictures.description}">
+                ${pictures.map((picture) => /*html*/`
+                  <img class="event__photo" src="${picture.src}" alt="${picture.description}">`).join('')}
               </div>
             </div>
           </section>
