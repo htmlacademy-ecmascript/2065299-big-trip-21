@@ -22,16 +22,16 @@ export default class BoardPresenter {
 
     render(new EventEditView({
       point: this.points[0],
-      pointDestination: this.destinationsModel.getById(this.point.destination.id),
-      pointOffers: this.offersModel.getByType(this.point.type)
+      pointDestination: this.destination.getById(this.points[0].destination),
+      pointOffers: this.offers.getByType(this.points[0].type)
     }), this.eventListComponent.getElement());
 
     this.points.forEach((point) => {
       render(
         new PointView({
           point,
-          pointDestination: this.destinationsModel.getById(point.destination.id),
-          pointOffers: this.offersModel.getByType(point.type)
+          pointDestination: this.destination.getById(this.points[0].destination),
+          pointOffers: this.offers.getByType(this.points[0].type)
         }), this.eventListComponent.getElement()
       );
     });
