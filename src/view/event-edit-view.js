@@ -1,5 +1,5 @@
-import { createElement } from '../render';
 import { formatToFullDate } from '../utils';
+import AbstractView from '../framework/view/abstract-view';
 
 function createEventEditTemplate({ point, pointDestination, pointOffers }) {
   const { type, dateFrom, dateTo, basePrice } = point;
@@ -82,10 +82,14 @@ function createEventEditTemplate({ point, pointDestination, pointOffers }) {
 
           <div class="event__field-group  event__field-group--time">
             <label class="visually-hidden" for="event-start-time-1">From</label>
-            <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${formatToFullDate(dateFrom)}">
+            <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${formatToFullDate(
+    dateFrom
+  )}">
             &mdash;
             <label class="visually-hidden" for="event-end-time-1">To</label>
-            <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${formatToFullDate(dateTo)}">
+            <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${formatToFullDate(
+    dateTo
+  )}">
           </div>
 
           <div class="event__field-group  event__field-group--price">
@@ -104,9 +108,12 @@ function createEventEditTemplate({ point, pointDestination, pointOffers }) {
             <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
             <div class="event__available-offers">
-            ${pointOffers.map((offer) => {
-    const checked = point.offers.includes(offer.id) ? 'checked' : '';
-    return /*html*/`
+            ${pointOffers
+    .map((offer) => {
+      const checked = point.offers.includes(offer.id)
+        ? 'checked'
+        : '';
+      return /*html*/ `
               <div class="event__offer-selector">
                 <input class="event__offer-checkbox  visually-hidden" id="event-offer-train-1" type="checkbox" name="event-offer-train"
                 ${checked}>
@@ -116,7 +123,8 @@ function createEventEditTemplate({ point, pointDestination, pointOffers }) {
                   <span class="event__offer-price">${offer.price}</span>
                 </label>
               </div>`;
-  }).join(' ')}
+    })
+    .join(' ')}
             </div>
           </section>
 
@@ -126,8 +134,12 @@ function createEventEditTemplate({ point, pointDestination, pointOffers }) {
 
             <div class="event__photos-container">
               <div class="event__photos-tape">
-                ${pictures.map((picture) => /*html*/`
-                  <img class="event__photo" src="${picture.src}" alt="${picture.description}">`).join('')}
+                ${pictures
+    .map(
+      (picture) => /*html*/ `
+                  <img class="event__photo" src="${picture.src}" alt="${picture.description}">`
+    )
+    .join('')}
               </div>
             </div>
           </section>
@@ -137,30 +149,19 @@ function createEventEditTemplate({ point, pointDestination, pointOffers }) {
   `;
 }
 
-export default class EventEditView {
-  constructor({point, pointDestination, pointOffers}) {
+export default class EventEditView extends AbstractView {
+  constructor({ point, pointDestination, pointOffers }) {
+    super();
     this.point = point;
     this.pointDestination = pointDestination;
     this.pointOffers = pointOffers;
   }
 
-  getTemplate() {
+  get template() {
     return createEventEditTemplate({
       point: this.point,
       pointDestination: this.pointDestination,
       pointOffers: this.pointOffers,
     });
-  }
-
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
   }
 }
