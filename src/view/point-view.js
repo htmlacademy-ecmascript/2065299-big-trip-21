@@ -1,5 +1,5 @@
 import AbstractView from '../framework/view/abstract-view';
-import { formatToDate, formatToTime, formatToFullDate } from '../utils';
+import { formatToDate, formatToTime, formatToFullDate, getPointDuration } from '../utils';
 
 function createPointTemplate({point, pointDestination, pointOffers}) {
 
@@ -20,7 +20,7 @@ function createPointTemplate({point, pointDestination, pointOffers}) {
             &mdash;
             <time class="event__end-time" datetime="${formatToFullDate(dateTo)}">${formatToTime(dateTo)}</time>
           </p>
-          <p class="event__duration">01H 10M</p>
+          <p class="event__duration">${getPointDuration(dateFrom, dateTo)}</p>
         </div>
         <p class="event__price">
           &euro;&nbsp;<span class="event__price-value">${basePrice}</span>

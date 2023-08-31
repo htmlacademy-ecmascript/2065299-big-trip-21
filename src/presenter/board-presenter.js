@@ -2,7 +2,6 @@ import EventsListView from '../view/events-list-view';
 import SortView from '../view/sort-view';
 import EventEditView from '../view/event-edit-view';
 import PointView from '../view/point-view';
-// import { render } from '../render';
 import { render } from '../framework/render';
 
 export default class BoardPresenter {
