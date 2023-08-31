@@ -19,6 +19,16 @@ export default class BoardPresenter {
     this.#points = [...pointsModel.get()];
   }
 
+  #renderPoint (point) {
+    const pointComponent = new PointView({
+      point,
+      pointDestination: this.#destination.getById(point.destination),
+      pointOffers: this.#offers.getByType(point.type)
+    });
+
+    render(pointComponent, this.#eventListComponent.element);
+  }
+
   init() {
     render(new SortView(), this.#boardContainer);
     render(this.#eventListComponent, this.#boardContainer);
@@ -30,13 +40,7 @@ export default class BoardPresenter {
     }), this.#eventListComponent.element);
 
     this.#points.forEach((point) => {
-      render(
-        new PointView({
-          point,
-          pointDestination: this.#destination.getById(point.destination),
-          pointOffers: this.#offers.getByType(point.type)
-        }), this.#eventListComponent.element
-      );
+      this.#renderPoint(point);
     });
   }
 }
