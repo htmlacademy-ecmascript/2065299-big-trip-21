@@ -4,7 +4,6 @@ import AbstractView from '../framework/view/abstract-view';
 function createEventEditTemplate({ point, pointDestination, pointOffers }) {
   const { type, dateFrom, dateTo, basePrice } = point;
   const { name, pictures, description } = pointDestination;
-
   return /*html*/ `
     <li class="trip-events__item">
       <form class="event event--edit" action="#" method="post">
