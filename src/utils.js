@@ -43,12 +43,12 @@ function getPointDuration(dateFrom, dateTo) {
   return pointDuration;
 }
 
-function getCurrentDate() {
-  return dayjs().toDate();
+function generateDateTo(date) {
+  return dayjs(date).add(getRandomInRange(0, 60), 'minute').add(getRandomInRange(0, 23), 'hour').toDate();
 }
 
-function generateDate(date) {
-  return dayjs(date).add(getRandomInRange(0, 60), 'minute').add(getRandomInRange(0, 24), 'hour').add(getRandomInRange(0, 28), 'day').toDate();
+function generateDateFrom(date) {
+  return dayjs(date).subtract(getRandomInRange(0, 60), 'minute').subtract(getRandomInRange(0, 24), 'hour').subtract(getRandomInRange(0, 1), 'day').toDate();
 }
 
 function formatToDate(date) {
@@ -63,4 +63,4 @@ function formatToFullDate(date) {
   return dayjs(date).format(FULL_DATE_FORMAT);
 }
 
-export { getRandomArrayElement, getRandomInRange, generateDate, getCurrentDate, formatToDate, formatToFullDate, formatToTime, getPointDuration };
+export { getRandomArrayElement, getRandomInRange, generateDateTo, generateDateFrom, formatToDate, formatToFullDate, formatToTime, getPointDuration };
