@@ -37,12 +37,14 @@ function getPointDuration(dateFrom, dateTo) {
   return pointDuration;
 }
 
-function generateDateTo(date) {
-  return dayjs(date).add(getRandomInRange(0, 60), 'minute').add(getRandomInRange(0, 23), 'hour').toDate();
+const startDay = dayjs().subtract(getRandomInRange(0, 60), 'minute').subtract(getRandomInRange(0, 24), 'hour').subtract(getRandomInRange(0, 3), 'day');
+
+function generateDateFrom() {
+  return startDay.toDate();
 }
 
-function generateDateFrom(date) {
-  return dayjs(date).subtract(getRandomInRange(0, 60), 'minute').subtract(getRandomInRange(0, 24), 'hour').subtract(getRandomInRange(0, 1), 'day').toDate();
+function generateDateTo() {
+  return startDay.add(getRandomInRange(0, 60), 'minute').add(getRandomInRange(0, 23), 'hour').add(getRandomInRange(0, 5), 'day').toDate();
 }
 
 function formatToDate(date) {
@@ -57,4 +59,16 @@ function formatToFullDate(date) {
   return dayjs(date).format(FULL_DATE_FORMAT);
 }
 
-export { generateDateTo, generateDateFrom, formatToDate, formatToFullDate, formatToTime, getPointDuration };
+function isPointFuture(point) {
+  return dayjs().isBefore(point.dateFrom);
+}
+
+function isPointPast(point) {
+  return dayjs().isAfter(point.dateTo);
+}
+
+function isPointPresent(point) {
+  return dayjs().isBefore(point.dateTo) && dayjs().isAfter(point.dateFrom);
+}
+
+export { generateDateTo, generateDateFrom, formatToDate, formatToFullDate, formatToTime, getPointDuration, isPointFuture, isPointPast, isPointPresent };
