@@ -1,15 +1,9 @@
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { DATE_FORMAT, TIME_FORMAT, FULL_DATE_FORMAT } from './mocks/const';
+import { DATE_FORMAT, TIME_FORMAT, FULL_DATE_FORMAT } from '../mocks/const';
+import { getRandomInRange } from './common';
 
-function getRandomInRange(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-function getRandomArrayElement(items) {
-  return items[Math.floor(Math.random() * items.length)];
-}
 
 dayjs.extend(duration);
 dayjs.extend(relativeTime);
@@ -63,4 +57,4 @@ function formatToFullDate(date) {
   return dayjs(date).format(FULL_DATE_FORMAT);
 }
 
-export { getRandomArrayElement, getRandomInRange, generateDateTo, generateDateFrom, formatToDate, formatToFullDate, formatToTime, getPointDuration };
+export { generateDateTo, generateDateFrom, formatToDate, formatToFullDate, formatToTime, getPointDuration };

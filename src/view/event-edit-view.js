@@ -1,4 +1,4 @@
-import { formatToFullDate } from '../utils';
+import { formatToFullDate } from '../util/point';
 import AbstractView from '../framework/view/abstract-view';
 
 function createEventEditTemplate({ point, pointDestination, pointOffers }) {

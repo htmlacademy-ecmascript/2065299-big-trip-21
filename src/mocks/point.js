@@ -1,4 +1,5 @@
-import { getRandomInRange, generateDateTo, generateDateFrom, getCurrentDate } from '../utils';
+import { getRandomInRange } from '../util/common';
+import { generateDateTo, generateDateFrom } from '../util/point';
 import { PRICE } from './const';
 
 function generatePoint(type, destinationId, offerIds) {

@@ -1,10 +1,5 @@
 import AbstractView from '../framework/view/abstract-view';
-import {
-  formatToDate,
-  formatToTime,
-  formatToFullDate,
-  getPointDuration,
-} from '../utils';
+import { formatToDate, formatToTime, formatToFullDate, getPointDuration } from '../util/point';
 
 function createPointTemplate({ point, pointDestination, pointOffers }) {
   const { basePrice, dateFrom, dateTo, isFavorite, type } = point;

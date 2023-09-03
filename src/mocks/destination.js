@@ -1,5 +1,4 @@
-import { getRandomArrayElement } from '../utils';
-import { getRandomInRange } from '../utils';
+import { getRandomArrayElement,getRandomInRange } from '../util/common';
 import { CITIES, DESCRIPTION, PICTURE_COUNT } from './const';
 
 function generateDestination() {

@@ -2,7 +2,7 @@ import { generateDestination } from '../mocks/destination';
 import { generateOffer } from '../mocks/offer';
 import { generatePoint } from '../mocks/point';
 
-import { getRandomArrayElement, getRandomInRange } from '../utils';
+import { getRandomArrayElement, getRandomInRange } from '../util/common';
 import { TYPES, POINT_COUNT, OFFER_COUNT, DESTINATION_COUNT } from '../mocks/const';
 
 
