@@ -1,4 +1,4 @@
-import { getRandomInRange, getRandomArrayElement } from '../utils';
+import { getRandomArrayElement, getRandomInRange } from '../util/common';
 import { PRICE, OFFERS } from './const';
 
 function generateOffer() {
