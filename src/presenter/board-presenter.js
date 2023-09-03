@@ -64,7 +64,7 @@ export default class BoardPresenter {
 
   #renderBoard() {
     if(this.#points.length === 0) {
-      render( new NoPointView(), this.#boardContainer);
+      render(new NoPointView(), this.#boardContainer);
       return;
     }
     render(new SortView(), this.#boardContainer);
