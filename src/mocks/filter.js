@@ -1,4 +1,4 @@
-import { filter } from "../util/filter";
+import { filter } from '../util/filter';
 
 function generateFilter(points) {
   return Object.entries(filter).map(
@@ -9,4 +9,4 @@ function generateFilter(points) {
   );
 }
 
-export {generateFilter}
+export {generateFilter};

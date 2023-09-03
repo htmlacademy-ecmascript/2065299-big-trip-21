@@ -10,7 +10,7 @@ function createFilterItemTemplate(filter, isChecked) {
       ${filteredPoints.length === 0 ? 'disabled' : ''}
       >
       <label class="trip-filters__filter-label" for="filter-${type}">${type}</label>
-    </div>`
+    </div>`;
 }
 
 function createFilterTemplate(filterItems) {
