@@ -20,6 +20,14 @@ export default class BoardPresenter {
   }
 
   #renderPoint (point) {
+    const escKeyDownHandler = (evt) => {
+      if (evt.key === 'Escape') {
+        evt.preventDefault();
+        replaceFormToPoint();
+        document.removeEventListener('keydown', escKeyDownHandler);
+      }
+    };
+
     const pointComponent = new PointView({
       point,
       pointDestination: this.#destination.getById(point.destination),
@@ -29,14 +37,6 @@ export default class BoardPresenter {
         document.addEventListener('keydown', escKeyDownHandler);
       }
     });
-
-    const escKeyDownHandler = (evt) => {
-      if (evt.key === 'Escape') {
-        evt.preventDefault();
-        replaceFormToPoint();
-        document.removeEventListener('keydown', escKeyDownHandler);
-      }
-    };
 
     const editPointComponent = new EventEditView({
       point,
