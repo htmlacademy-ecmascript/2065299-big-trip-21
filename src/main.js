@@ -12,7 +12,6 @@ const tripInfoElement = document.querySelector('.trip-main');
 const filterElement = document.querySelector('.trip-controls__filters');
 const tripEventsElement = document.querySelector('.trip-events');
 
-
 const mockService = new MockService();
 const destinationsModel = new DestinationsModel(mockService);
 const offersModel = new OffersModel(mockService);
@@ -22,13 +21,12 @@ const boardPresenter = new BoardPresenter({
   boardContainer: tripEventsElement,
   destinationsModel,
   offersModel,
-  pointsModel
+  pointsModel,
 });
 
 const filters = generateFilter(pointsModel.get());
-console.log(filters);
 
 render(new TripInfoView(), tripInfoElement, RenderPosition.AFTERBEGIN);
-render(new FilterView({filters}), filterElement);
+render(new FilterView({ filters }), filterElement);
 
 boardPresenter.init();
