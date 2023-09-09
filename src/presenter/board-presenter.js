@@ -3,10 +3,12 @@ import SortView from '../view/sort-view';
 import EventEditView from '../view/event-edit-view';
 import PointView from '../view/point-view';
 import NoPointView from '../view/no-point-view';
-import { render, replace } from '../framework/render';
+import { render, replace, RenderPosition } from '../framework/render';
 
 export default class BoardPresenter {
   #eventListComponent = new EventsListView();
+  #sortComponent = new SortView();
+  #noPointComponent = new NoPointView();
   #boardContainer = null;
   #destination = null;
   #offers = null;
@@ -62,17 +64,30 @@ export default class BoardPresenter {
     }
   }
 
-  #renderBoard() {
-    if(this.#points.length === 0) {
-      render(new NoPointView(), this.#boardContainer);
-      return;
-    }
-    render(new SortView(), this.#boardContainer);
-    render(this.#eventListComponent, this.#boardContainer);
+  #renderSort() {
+    render(this.#sortComponent, this.#boardContainer, RenderPosition.AFTERBEGIN);
+  }
 
+  #renderPoints() {
     this.#points.forEach((point) => {
       this.#renderPoint(point);
     });
+  }
+
+  #renderNoPoint() {
+    render(this.#noPointComponent, this.#boardContainer);
+  }
+
+  #renderBoard() {
+    render(this.#eventListComponent, this.#boardContainer);
+
+    if(this.#points.length === 0) {
+      this.#renderNoPoint();
+      return;
+    }
+
+    this.#renderSort();
+    this.#renderPoints();
   }
 
   init() {
