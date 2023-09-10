@@ -35,7 +35,8 @@ export default class BoardPresenter {
     const pointPresenter = new PointPresenter({
       container: this.#eventListComponent.element,
       destinationsModel: this.#destinationsModel,
-      offersModel: this.#offersModel
+      offersModel: this.#offersModel,
+      onDataChange: this.#handlePointChange
     });
 
     pointPresenter.init(point);
