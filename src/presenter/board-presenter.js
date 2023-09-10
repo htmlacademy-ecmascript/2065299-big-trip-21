@@ -3,6 +3,7 @@ import SortView from '../view/sort-view';
 import NoPointView from '../view/no-point-view';
 import PointPresenter from './point-presenter';
 import { render, RenderPosition } from '../framework/render';
+import { updateItem } from '../util/common';
 
 export default class BoardPresenter {
   #eventListComponent = new EventsListView();
@@ -24,6 +25,11 @@ export default class BoardPresenter {
 
     this.#points = [...pointsModel.get()];
   }
+
+  #handlePointChange = (updatedPoint) => {
+    this.#points = updateItem(this.#points, updatedPoint);
+    this.#pointPresenters.get(updatedPoint.id).init(updatedPoint);
+  };
 
   #renderPoint (point) {
     const pointPresenter = new PointPresenter({
