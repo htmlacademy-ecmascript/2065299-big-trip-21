@@ -16,15 +16,17 @@ export default class BoardPresenter {
 
   #pointPresenters = new Map();
 
-  constructor({boardContainer,
-    destinationsModel, offersModel,
-    pointsModel}) {
+  constructor({boardContainer, destinationsModel, offersModel, pointsModel}) {
     this.#boardContainer = boardContainer;
     this.#destinationsModel = destinationsModel;
     this.#offersModel = offersModel;
 
     this.#points = [...pointsModel.get()];
   }
+
+  #handleModeChange = () => {
+    this.#pointPresenters.forEach((presenter) => presenter.resetView());
+  };
 
   #handlePointChange = (updatedPoint) => {
     this.#points = updateItem(this.#points, updatedPoint);
@@ -36,7 +38,8 @@ export default class BoardPresenter {
       container: this.#eventListComponent.element,
       destinationsModel: this.#destinationsModel,
       offersModel: this.#offersModel,
-      onDataChange: this.#handlePointChange
+      onDataChange: this.#handlePointChange,
+      onModeChange: this.#handleModeChange
     });
 
     pointPresenter.init(point);
