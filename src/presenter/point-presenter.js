@@ -56,7 +56,7 @@ export default class PointPresenter {
     remove(prevPointEditComponent);
   }
 
-  destroy(){
+  destroy() {
     remove(this.#pointComponent);
     remove(this.#editPointComponent);
   }
@@ -69,13 +69,13 @@ export default class PointPresenter {
     replace(this.#pointComponent, this.#editPointComponent);
   }
 
-  #escKeyDownHandler(evt) {
+  #escKeyDownHandler = (evt) => {
     if (evt.key === 'Escape') {
       evt.preventDefault();
       this.#replaceFormToPoint();
       document.removeEventListener('keydown', this.#escKeyDownHandler);
     }
-  }
+  };
 
   #handleEditBtnClick = () => {
     this.#replacePointToForm();
@@ -84,9 +84,11 @@ export default class PointPresenter {
 
   #handleFormSubmit = () => {
     this.#replaceFormToPoint();
+    document.removeEventListener('keydown', this.#escKeyDownHandler);
   };
 
   #handleHideBtnClick = () => {
     this.#replaceFormToPoint();
+    document.removeEventListener('keydown', this.#escKeyDownHandler);
   };
 }
