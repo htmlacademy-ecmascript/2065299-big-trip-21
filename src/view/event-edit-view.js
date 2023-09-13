@@ -112,9 +112,7 @@ function createEventEditTemplate({ point, pointDestination, pointOffers }) {
             <div class="event__available-offers">
             ${pointOffers
     .map((offer) => {
-      const checked = point.offers.includes(offer.id)
-        ? 'checked'
-        : '';
+      const checked = point.offers.includes(offer.id) ? 'checked' : '';
       return /*html*/ `
               <div class="event__offer-selector">
                 <input class="event__offer-checkbox  visually-hidden" id="event-offer-train-1" type="checkbox" name="event-offer-train"
