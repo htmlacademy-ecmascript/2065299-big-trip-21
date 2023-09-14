@@ -2,7 +2,7 @@ import AbstractView from '../framework/view/abstract-view';
 
 export default class RadioListView extends AbstractView {
   _items = [];
-  _handleItemChange = null;
+  _handleItemChange;
 
   constructor({items, onItemChange}) {
     super();

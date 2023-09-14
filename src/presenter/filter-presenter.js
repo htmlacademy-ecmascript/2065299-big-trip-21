@@ -1,7 +1,6 @@
 import FilterView from '../view/filter-view';
 import {filter} from '../util/filter';
 import { render } from '../framework/render';
-// import { render } from '../framework/render';
 
 export default class FilterPresenter {
   #container = null;
@@ -16,8 +15,7 @@ export default class FilterPresenter {
       .map(([filterType, filterPoints], index) => ({
         type: filterType,
         isChecked: index === 0,
-        isDisabled: filterPoints(this.#pointsModel.get()).length === 0,
-        filteredPoints: filterPoints(this.#pointsModel.get()),
+        isDisabled: filterPoints(this.#pointsModel.get()).length === 0
       }),);
   }
 

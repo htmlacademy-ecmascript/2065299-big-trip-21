@@ -1,10 +1,9 @@
 import RadioListView from './radio-list-view';
 
-function createFilterItemTemplate(filter) {
-  const { type,isChecked, isDisabled } = filter;
+function createFilterItemTemplate({ type, isChecked, isDisabled }) {
   return /*html*/ `
     <div class="trip-filters__filter">
-      <input id="filter-${type}" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="${type}"
+      <input id="filter-${type}" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="${type}" data-item="${type}"
       ${isChecked ? 'checked' : ''}
       ${isDisabled ? 'disabled' : ''}
       >
