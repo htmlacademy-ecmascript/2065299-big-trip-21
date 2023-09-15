@@ -1,6 +1,5 @@
 import { RenderPosition, render } from './framework/render';
 import TripInfoView from './view/trip-info-view';
-// import FilterView from './view/filter-view';
 import BoardPresenter from './presenter/board-presenter';
 import MockService from './service/mock-service';
 import DestinationsModel from './model/destinations-model';

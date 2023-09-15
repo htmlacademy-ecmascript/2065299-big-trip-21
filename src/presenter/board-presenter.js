@@ -6,7 +6,7 @@ import { render, RenderPosition, replace, remove } from '../framework/render';
 import { updateItem } from '../util/common';
 import { SORT_TYPE } from '../mocks/const';
 import { enabledSortType } from '../mocks/const';
-import { sort } from '../util/sort';
+import { sortFunctions } from '../util/sort-functions';
 
 export default class BoardPresenter {
   #eventListComponent = new EventsListView();
@@ -83,7 +83,7 @@ export default class BoardPresenter {
 
   #sortPoints = (sortType) => {
     this.#currentSortType = sortType;
-    this.#points = sort[this.#currentSortType](this.#points);
+    this.#points = sortFunctions[this.#currentSortType](this.#points);
   };
 
   #renderPointsContainer() {
