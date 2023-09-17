@@ -2,17 +2,21 @@ import EventsListView from '../view/events-list-view';
 import SortView from '../view/sort-view';
 import NoPointView from '../view/no-point-view';
 import PointPresenter from './point-presenter';
-import { render, RenderPosition } from '../framework/render';
+import { render, RenderPosition, replace, remove } from '../framework/render';
 import { updateItem } from '../util/common';
+import { SORT_TYPE } from '../mocks/const';
+import { enabledSortType } from '../mocks/const';
+import { sortFunctions } from '../util/sort-functions';
 
 export default class BoardPresenter {
   #eventListComponent = new EventsListView();
-  #sortComponent = new SortView();
+  #sortComponent = null;
   #noPointComponent = new NoPointView();
   #boardContainer = null;
   #destinationsModel = null;
   #offersModel = null;
   #points = [];
+  #currentSortType = SORT_TYPE.DAY;
 
   #pointPresenters = new Map();
 
@@ -33,6 +37,7 @@ export default class BoardPresenter {
     this.#pointPresenters.get(updatedPoint.id).init(updatedPoint);
   };
 
+
   #renderPoint (point) {
     const pointPresenter = new PointPresenter({
       container: this.#eventListComponent.element,
@@ -47,8 +52,39 @@ export default class BoardPresenter {
   }
 
   #renderSort() {
-    render(this.#sortComponent, this.#boardContainer, RenderPosition.AFTERBEGIN);
+    const prevSortComponent = this.#sortComponent;
+
+    const sortTypes = Object.values(SORT_TYPE)
+      .map((type) => ({
+        type,
+        isChecked: (type === this.#currentSortType),
+        isDisabled: !enabledSortType[type]
+      }));
+
+    this.#sortComponent = new SortView({
+      items: sortTypes,
+      onItemChange: this.#sortTypeChangeHandler
+    });
+    if (prevSortComponent) {
+      replace(this.#sortComponent, prevSortComponent);
+      remove(prevSortComponent);
+    } else {
+      render(this.#sortComponent, this.#boardContainer, RenderPosition.AFTERBEGIN);
+    }
   }
+
+  #sortTypeChangeHandler = (sortType) => {
+    this.#sortPoints(sortType);
+    this.#clearPoints();
+    this.#renderSort();
+    this.#renderPoints();
+
+  };
+
+  #sortPoints = (sortType) => {
+    this.#currentSortType = sortType;
+    this.#points = sortFunctions[this.#currentSortType](this.#points);
+  };
 
   #renderPointsContainer() {
     render(this.#eventListComponent, this.#boardContainer);
