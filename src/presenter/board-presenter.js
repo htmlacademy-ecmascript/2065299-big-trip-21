@@ -4,9 +4,9 @@ import NoPointView from '../view/no-point-view';
 import PointPresenter from './point-presenter';
 import { render, RenderPosition, replace, remove } from '../framework/render';
 import { updateItem } from '../util/common';
-import { SORT_TYPE } from '../mocks/const';
+import { SortTypes } from '../mocks/const';
 import { enabledSortType } from '../mocks/const';
-import { sortFunctions } from '../util/sort-functions';
+import { sortBy } from '../util/sort-by';
 
 export default class BoardPresenter {
   #eventListComponent = new EventsListView();
@@ -16,7 +16,7 @@ export default class BoardPresenter {
   #destinationsModel = null;
   #offersModel = null;
   #points = [];
-  #currentSortType = SORT_TYPE.DAY;
+  #currentSortType = SortTypes.DAY;
 
   #pointPresenters = new Map();
 
@@ -54,7 +54,7 @@ export default class BoardPresenter {
   #renderSort() {
     const prevSortComponent = this.#sortComponent;
 
-    const sortTypes = Object.values(SORT_TYPE)
+    const sortTypes = Object.values(SortTypes)
       .map((type) => ({
         type,
         isChecked: (type === this.#currentSortType),
@@ -83,7 +83,7 @@ export default class BoardPresenter {
 
   #sortPoints = (sortType) => {
     this.#currentSortType = sortType;
-    this.#points = sortFunctions[this.#currentSortType](this.#points);
+    this.#points = sortBy[this.#currentSortType](this.#points);
   };
 
   #renderPointsContainer() {

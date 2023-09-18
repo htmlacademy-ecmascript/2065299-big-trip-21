@@ -52,14 +52,14 @@ const DATE_FORMAT = 'DD/MMM';
 const TIME_FORMAT = 'HH:mm';
 const FULL_DATE_FORMAT = 'DD/MM/YY HH:mm';
 
-const FILTER_TYPE = {
+const FilterTypes = {
   EVERYTHING: 'everything',
   FUTURE: 'future',
   PRESENT: 'present',
   PAST: 'past',
 };
 
-const SORT_TYPE = {
+const SortTypes = {
   DAY: 'day',
   EVENT: 'event',
   TIME: 'time',
@@ -68,11 +68,11 @@ const SORT_TYPE = {
 };
 
 const enabledSortType = {
-  [SORT_TYPE.DAY]: true,
-  [SORT_TYPE.EVENT]: false,
-  [SORT_TYPE.TIME]: true,
-  [SORT_TYPE.PRICE]: true,
-  [SORT_TYPE.OFFERS]: false,
+  [SortTypes.DAY]: true,
+  [SortTypes.EVENT]: false,
+  [SortTypes.TIME]: true,
+  [SortTypes.PRICE]: true,
+  [SortTypes.OFFERS]: false,
 };
 
 export {
@@ -88,7 +88,7 @@ export {
   PICTURE_COUNT,
   OFFERS,
   DESTINATION_COUNT,
-  FILTER_TYPE,
-  SORT_TYPE,
+  FilterTypes,
+  SortTypes,
   enabledSortType
 };
