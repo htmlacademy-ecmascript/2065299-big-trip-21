@@ -1,9 +1,9 @@
 import { formatToFullDate } from '../util/point';
-import AbstractView from '../framework/view/abstract-view';
+import AbstractStatefulView from '../framework/view/abstract-stateful-view';
 import { TYPES } from '../mocks/const';
 
-function createEventEditTemplate({ point, pointDestination, pointOffers }) {
-  const { type, dateFrom, dateTo, basePrice } = point;
+function createEventEditTemplate({ state, pointDestination, pointOffers }) {
+  const { type, dateFrom, dateTo, basePrice } = state;
   const { name, pictures, description } = pointDestination;
 
   const isOffers = pointOffers.length > 0;
@@ -75,7 +75,7 @@ function createEventEditTemplate({ point, pointDestination, pointOffers }) {
           <h3 class="event__section-title  event__section-title--offers">Offers</h3>
           <div class="event__available-offers">
             ${pointOffers.map((offer) => {
-    const checked = point.offers.includes(offer.id) ? 'checked' : '';
+    const checked = state.offers.includes(offer.id) ? 'checked' : '';
     return /*html*/ `
             <div class="event__offer-selector">
               <input class="event__offer-checkbox  visually-hidden" id="event-offer-train-1" type="checkbox" name="event-offer-train"
@@ -112,8 +112,7 @@ function createEventEditTemplate({ point, pointDestination, pointOffers }) {
   `;
 }
 
-export default class EventEditView extends AbstractView {
-  #point = null;
+export default class EventEditView extends AbstractStatefulView {
   #pointDestination = null;
   #pointOffers = null;
   #handleFormSubmit = null;
@@ -121,34 +120,43 @@ export default class EventEditView extends AbstractView {
 
   constructor({ point, pointDestination, pointOffers, onFormSubmit, onHideBtnClick }) {
     super();
-    this.#point = point;
+    this._state = point;
     this.#pointDestination = pointDestination;
     this.#pointOffers = pointOffers;
     this.#handleFormSubmit = onFormSubmit;
     this.#handleHideBtnClick = onHideBtnClick;
 
-    this.element.querySelector('.event')
-      .addEventListener('submit', this.#formSubmitHandler);
-
-    this.element.querySelector('.event__rollup-btn')
-      .addEventListener('click', this.#hideBtnClickHandler);
+    this._setState(EventEditView.parsePointToState({point}));
+    this._restoreHandlers();
   }
+
 
   get template() {
     return createEventEditTemplate({
-      point: this.#point,
+      state: this._state,
       pointDestination: this.#pointDestination,
       pointOffers: this.#pointOffers,
     });
   }
 
+  _restoreHandlers = () => {
+    this.element.querySelector('.event')
+      .addEventListener('submit', this.#formSubmitHandler);
+
+    this.element.querySelector('.event__rollup-btn')
+      .addEventListener('click', this.#hideBtnClickHandler);
+  };
+
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
-    this.#handleFormSubmit(this.#point);
+    this.#handleFormSubmit(this._state);
   };
 
   #hideBtnClickHandler = (evt) => {
     evt.preventDefault();
     this.#handleHideBtnClick();
   };
+
+  static parsePointToState = ({point}) => ({point});
+  static parseStateToPoint = (state) => state.point;
 }
