@@ -152,6 +152,12 @@ export default class EventEditView extends AbstractStatefulView {
 
     this.element.querySelector('.event__type-group')
       .addEventListener('change', this.#typeChangeHandler);
+
+    this.element.querySelector('.event__available-offers')
+      ?.addEventListener('change', this.#offerChangeHandler);
+
+    this.element.querySelector('.event__input--price')
+      .addEventListener('change', this.#priceChangeHandler);
   };
 
   #formSubmitHandler = (evt) => {
@@ -185,6 +191,26 @@ export default class EventEditView extends AbstractStatefulView {
       point: {
         ...this._state.point,
         destination: selectedDestinationId
+      }
+    });
+  };
+
+  #offerChangeHandler = () => {
+    const checkedOffers = Array.from(this.element.querySelectorAll('.event__offer-chackbox:checked'));
+
+    this._setState({
+      point: {
+        ...this._state.point,
+        offers: checkedOffers.map((element) => element.dataset.offerId)
+      }
+    });
+  };
+
+  #priceChangeHandler = (evt) => {
+    this._setState({
+      point: {
+        ...this._state.point,
+        basePrice: evt.target.valueAsNumber
       }
     });
   };
