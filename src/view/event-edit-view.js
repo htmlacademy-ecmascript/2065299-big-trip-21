@@ -166,15 +166,17 @@ export default class EventEditView extends AbstractStatefulView {
 
   #typeChangeHandler = (evt) => {
     this.updateElement({
+
       point: {
         ...this._state.point,
         type: evt.target.value,
-        // не обнуляются офферы
-        offers: []
+        // ошибка при отрисовке оферов
+        // offers: this.#pointOffers.getByType(evt.target.value)
       }
     });
   };
 
+  //не изменяется назначение
   #destionationChangeHandler = (evt) => {
     const selectedDestination = this.#pointDestinations.find((pointDestination) => pointDestination.name === evt.target.value);
     const selectedDestinationId = (selectedDestination) ? selectedDestination.id : null;
@@ -185,9 +187,7 @@ export default class EventEditView extends AbstractStatefulView {
         destination: selectedDestinationId
       }
     });
-
   };
-
 
   static parsePointToState = ({point}) => ({point});
   static parseStateToPoint = (state) => state.point;
