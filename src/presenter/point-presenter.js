@@ -36,7 +36,7 @@ export default class PointPresenter {
 
     this.#pointComponent = new PointView({
       point: this.#point,
-      pointDestination: this.#destinationsModel.getById(point.destination),
+      pointDestinations: this.#destinationsModel.getById(point.destination),
       pointOffers: this.#offersModel.getByType(point.type),
       onEditBtnClick: this.#handleEditBtnClick,
       onFavoriteClick: this.#handleFavoriteClick
@@ -44,7 +44,7 @@ export default class PointPresenter {
 
     this.#editPointComponent = new EventEditView({
       point: this.#point,
-      pointDestination: this.#destinationsModel.getById(point.destination),
+      pointDestinations: this.#destinationsModel.getById(point.destination),
       pointOffers: this.#offersModel.getByType(point.type),
       onFormSubmit: this.#handleFormSubmit,
       onHideBtnClick: this.#handleHideBtnClick

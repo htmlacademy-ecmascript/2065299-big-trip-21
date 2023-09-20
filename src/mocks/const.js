@@ -1,6 +1,6 @@
 const POINT_COUNT = 8;
 const OFFER_COUNT = 6;
-const DESTINATION_COUNT = 3;
+const DESTINATION_COUNT = 9;
 const PICTURE_COUNT = 8;
 
 const CITIES = [

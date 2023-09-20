@@ -1,7 +1,7 @@
 import AbstractView from '../framework/view/abstract-view';
 import { formatToDate, formatToTime, formatToFullDate, getPointDuration } from '../util/point';
 
-function createPointTemplate({ point, pointDestination, pointOffers }) {
+function createPointTemplate({ point, pointDestinations, pointOffers }) {
   const { basePrice, dateFrom, dateTo, isFavorite, type } = point;
 
   return /*html*/ `
@@ -13,7 +13,7 @@ function createPointTemplate({ point, pointDestination, pointOffers }) {
         <div class="event__type">
           <img class="event__type-icon" width="42" height="42" src="img/icons/${type.toLowerCase()}.png" alt="Event type icon">
         </div>
-        <h3 class="event__title">${type} ${pointDestination.name}</h3>
+        <h3 class="event__title">${type} ${pointDestinations.name}</h3>
         <div class="event__schedule">
           <p class="event__time">
             <time class="event__start-time" datetime="${formatToFullDate(
@@ -61,15 +61,15 @@ function createPointTemplate({ point, pointDestination, pointOffers }) {
 
 export default class PointView extends AbstractView {
   #point = null;
-  #pointDestination = null;
+  #pointDestinations = null;
   #pointOffers = null;
   #handleEditBtnClick = null;
   #handleFavoriteClick = null;
 
-  constructor({ point, pointDestination, pointOffers, onEditBtnClick, onFavoriteClick }) {
+  constructor({ point, pointDestinations, pointOffers, onEditBtnClick, onFavoriteClick }) {
     super();
     this.#point = point;
-    this.#pointDestination = pointDestination;
+    this.#pointDestinations = pointDestinations;
     this.#pointOffers = pointOffers;
     this.#handleEditBtnClick = onEditBtnClick;
     this.#handleFavoriteClick = onFavoriteClick;
@@ -86,7 +86,7 @@ export default class PointView extends AbstractView {
   get template() {
     return createPointTemplate({
       point: this.#point,
-      pointDestination: this.#pointDestination,
+      pointDestinations: this.#pointDestinations,
       pointOffers: this.#pointOffers,
     });
   }
