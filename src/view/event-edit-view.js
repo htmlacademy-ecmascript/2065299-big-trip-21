@@ -2,6 +2,7 @@ import { formatToFullDate } from '../util/point';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view';
 import { TYPES } from '../mocks/const';
 
+
 function createEventEditTemplate({ state, pointDestinations, pointOffers }) {
   // const { type, dateFrom, dateTo, basePrice } = state;
   const { point } = state;
@@ -79,7 +80,7 @@ function createEventEditTemplate({ state, pointDestinations, pointOffers }) {
     const checked = point.offers.includes(offer.id) ? 'checked' : '';
     return /*html*/ `
             <div class="event__offer-selector">
-              <input class="event__offer-checkbox  visually-hidden" id="event-offer-train-1" type="checkbox" name="event-offer-train"
+              <input class="event__offer-checkbox  visually-hidden" id="event-offer-train-1" type="checkbox" name="event-offer-train" data-offer-id=${offer.id}
               ${checked}>
               <label class="event__offer-label" for="event-offer-train-1">
                 <span class="event__offer-title">${offer.title}</span>
@@ -131,7 +132,6 @@ export default class EventEditView extends AbstractStatefulView {
     this._restoreHandlers();
   }
 
-
   get template() {
     return createEventEditTemplate({
       state: this._state,
@@ -139,6 +139,8 @@ export default class EventEditView extends AbstractStatefulView {
       pointOffers: this.#pointOffers,
     });
   }
+
+  reset = (point) => this.updateElement({point});
 
   _restoreHandlers = () => {
     this.element.querySelector('.event')
@@ -176,8 +178,8 @@ export default class EventEditView extends AbstractStatefulView {
       point: {
         ...this._state.point,
         type: evt.target.value,
-        // ошибка при отрисовке оферов
-        // offers: this.#pointOffers.getByType(evt.target.value)
+        // ошибка не перерисовывает оферы
+        offer: []
       }
     });
   };
@@ -201,6 +203,7 @@ export default class EventEditView extends AbstractStatefulView {
     this._setState({
       point: {
         ...this._state.point,
+        // на инпут data-offer-id=${offer.id}?
         offers: checkedOffers.map((element) => element.dataset.offerId)
       }
     });
