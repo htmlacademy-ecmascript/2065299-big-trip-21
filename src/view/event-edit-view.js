@@ -169,6 +169,7 @@ export default class EventEditView extends AbstractStatefulView {
       point: {
         ...this._state.point,
         type: evt.target.value,
+        // не обнуляются офферы
         offers: []
       }
     });
@@ -184,7 +185,9 @@ export default class EventEditView extends AbstractStatefulView {
         destination: selectedDestinationId
       }
     });
+
   };
+
 
   static parsePointToState = ({point}) => ({point});
   static parseStateToPoint = (state) => state.point;
