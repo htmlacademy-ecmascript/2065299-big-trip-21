@@ -1,12 +1,11 @@
 import EventEditView from '../view/event-edit-view';
 import PointView from '../view/point-view';
+import { render, replace, remove } from '../framework/render';
 
 const MODE = {
   DEFAULT: 'DEFAULT',
   EDITING: 'EDITING',
 };
-
-import { render, replace, remove } from '../framework/render';
 
 export default class PointPresenter {
   #container = null;
@@ -44,8 +43,8 @@ export default class PointPresenter {
 
     this.#editPointComponent = new EventEditView({
       point: this.#point,
-      pointDestinations: this.#destinationsModel.getById(point.destination),
-      pointOffers: this.#offersModel.getByType(point.type),
+      pointDestinations: this.#destinationsModel.get(),
+      pointOffers: this.#offersModel.get(),
       onFormSubmit: this.#handleFormSubmit,
       onHideBtnClick: this.#handleHideBtnClick
     });

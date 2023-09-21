@@ -5,12 +5,23 @@ import flatpickr from 'flatpickr';
 
 import 'flatpickr/dist/flatpickr.min.css';
 
-function createEventEditTemplate({ state, pointDestinations, pointOffers }) {
-  // const { type, dateFrom, dateTo, basePrice } = state;
-  const { point } = state;
-  const { name, pictures, description } = pointDestinations;
+function createEventTypesTemplate() {
+  return (/*html*/`
+  ${TYPES.map((eventType) => /*html*/`
+    <div class="event__type-item">
+      <input id="event-type-${eventType.toLowerCase()}-1" class="event__type-input visually-hidden" type="radio" name="event-type" value="${eventType.toLowerCase()}" ${eventType.toLowerCase() === eventType.toLowerCase() ? 'checked' : ''}>
+      <label class="event__type-label event__type-label--${eventType.toLowerCase()}" for="event-type-${eventType.toLowerCase()}-1">${eventType}</label>
+    </div>`).join('')}
+  `);
+}
 
-  const isOffers = pointOffers.length > 0;
+function createEventEditTemplate({ state, pointDestinations, pointOffers }) {
+  const { point } = state;
+  const offersByType = pointOffers.find((item) => item.type.toLowerCase() === point.type.toLowerCase()).offers;
+  const destinationsById = pointDestinations.find((item) => item.id === point.destination);
+  const { name, pictures, description } = destinationsById;
+
+  const isOffers = offersByType.length > 0;
   const isDestination = pictures.length > 0 && description;
 
   return /*html*/ `
@@ -26,12 +37,7 @@ function createEventEditTemplate({ state, pointDestinations, pointOffers }) {
             <div class="event__type-list">
               <fieldset class="event__type-group">
                 <legend class="visually-hidden">Event type</legend>
-                ${TYPES.map((eventType) => `
-                <div class="event__type-item">
-                    <input id="event-type-${eventType.toLowerCase()}-1" class="event__type-input visually-hidden" type="radio" name="event-type" value="${eventType.toLowerCase()}" ${eventType.toLowerCase() === eventType.toLowerCase() ? 'checked' : ''}>
-                    <label class="event__type-label event__type-label--${eventType.toLowerCase()}" for="event-type-${eventType.toLowerCase()}-1">${eventType}</label>
-                </div>
-                `).join('')}
+                ${createEventTypesTemplate()}
               </fieldset>
             </div>
           </div>
@@ -74,11 +80,11 @@ function createEventEditTemplate({ state, pointDestinations, pointOffers }) {
                   </button>
         </header>
         <section class="event__details">
-        ${isOffers ? `
+        ${isOffers ? /*html*/`
         <section class="event__section  event__section--offers">
           <h3 class="event__section-title  event__section-title--offers">Offers</h3>
           <div class="event__available-offers">
-            ${pointOffers.map((offer) => {
+            ${offersByType.map((offer) => {
     const checked = point.offers.includes(offer.id) ? 'checked' : '';
     return /*html*/ `
             <div class="event__offer-selector">
@@ -94,7 +100,7 @@ function createEventEditTemplate({ state, pointDestinations, pointOffers }) {
     .join(' ')}
             </div>
           </section>` : ''}
-          ${isDestination ? `
+          ${isDestination ? /*html*/`
           <section class="event__section  event__section--destination">
             <h3 class="event__section-title  event__section-title--destination">Destination</h3>
             <p class="event__destination-description">${name} ${description}</p>
@@ -109,7 +115,6 @@ function createEventEditTemplate({ state, pointDestinations, pointOffers }) {
               </div>
             </div>
           </section>` : ' '}
-          
         </section>
       </form>
     </li>
@@ -194,17 +199,14 @@ export default class EventEditView extends AbstractStatefulView {
 
   #typeChangeHandler = (evt) => {
     this.updateElement({
-
       point: {
         ...this._state.point,
         type: evt.target.value,
-        // ошибка не перерисовывает оферы
         offer: []
       }
     });
   };
 
-  //не изменяется назначение
   #destionationChangeHandler = (evt) => {
     const selectedDestination = this.#pointDestinations.find((pointDestination) => pointDestination.name === evt.target.value);
     const selectedDestinationId = (selectedDestination) ? selectedDestination.id : null;
@@ -223,7 +225,6 @@ export default class EventEditView extends AbstractStatefulView {
     this._setState({
       point: {
         ...this._state.point,
-        // на инпут data-offer-id=${offer.id}?
         offers: checkedOffers.map((element) => element.dataset.offerId)
       }
     });

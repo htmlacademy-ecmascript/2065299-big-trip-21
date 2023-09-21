@@ -1,9 +1,8 @@
 import AbstractView from '../framework/view/abstract-view';
 import { formatToDate, formatToTime, formatToFullDate, getPointDuration } from '../util/point';
 
-function createPointTemplate({ point, pointDestinations, pointOffers }) {
-  const { basePrice, dateFrom, dateTo, isFavorite, type} = point;
-
+function createPointTemplate({ point, pointDestinations, pointOffers}) {
+  const { basePrice, dateFrom, dateTo, isFavorite, type } = point;
   const selectedOffers = pointOffers.filter((offer) =>
     point.offers.includes(offer.id));
 
