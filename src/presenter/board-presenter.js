@@ -16,7 +16,6 @@ export default class BoardPresenter {
   #destinationsModel = null;
   #offersModel = null;
   #points = [];
-  #defaultSortType = SortTypes.DAY;
   #currentSortType = SortTypes.DAY;
 
 
@@ -93,7 +92,6 @@ export default class BoardPresenter {
   }
 
   #renderPoints() {
-    this.#points = sortBy[this.#defaultSortType](this.#points);
     this.#points.forEach((point) => {
       this.#renderPoint(point);
     });
