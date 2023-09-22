@@ -16,8 +16,8 @@ function createEventTypesTemplate() {
 }
 
 // function createDestinationListTemplate (pointDestinations, destinationsById) {
-// const cityDestination = new Set(destinations.map((item) => item.name));
-// return (`${cityDestination.forEach((city) => `<option value="${city}" ${(city === destinationsById.name) ? 'selected' : ''}>${city}</option>`).join('')}`);
+//   const cityDestination = new Set(pointDestinations.map((item) => item.name));
+//   return (`${cityDestination.forEach((city) => `<option value="${city}" ${(city === destinationsById.name) ? 'selected' : ''}>${city}</option>`).join('')}`);
 // }
 
 function createDateTemplate(point) {
@@ -94,6 +94,7 @@ function createDestinationTemplate(isDestination, destinationsById) {
 }
 
 function createEventEditTemplate({ state, pointDestinations, pointOffers }) {
+  // console.log(pointDestinations);
   const { point } = state;
   const offersByType = pointOffers.find((item) => item.type.toLowerCase() === point.type.toLowerCase()).offers;
   const destinationsById = pointDestinations.find((item) => item.id === point.destination);
@@ -128,7 +129,6 @@ function createEventEditTemplate({ state, pointDestinations, pointOffers }) {
             </label>
             <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${name}" list="destination-list-1">
             <datalist id="destination-list-1">
-             
             <option value="Amsterdam"></option>
             <option value="Geneva"></option>
             <option value="Chamonix"></option>
@@ -151,6 +151,7 @@ function createEventEditTemplate({ state, pointDestinations, pointOffers }) {
       </form>
     </li>
   `;
+
 }
 
 export default class EventEditView extends AbstractStatefulView {
@@ -242,7 +243,6 @@ export default class EventEditView extends AbstractStatefulView {
   #destionationChangeHandler = (evt) => {
     const selectedDestination = this.#pointDestinations.find((pointDestination) => pointDestination.name === evt.target.value);
     const selectedDestinationId = (selectedDestination) ? selectedDestination.id : null;
-
     this.updateElement({
       point: {
         ...this._state.point,
