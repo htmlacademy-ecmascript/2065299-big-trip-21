@@ -15,11 +15,91 @@ function createEventTypesTemplate() {
   `);
 }
 
+// function createDestinationListTemplate (pointDestinations, destinationsById) {
+// const cityDestination = new Set(destinations.map((item) => item.name));
+// return (`${cityDestination.forEach((city) => `<option value="${city}" ${(city === destinationsById.name) ? 'selected' : ''}>${city}</option>`).join('')}`);
+// }
+
+function createDateTemplate(point) {
+  return (/*html*/`
+    <div class="event__field-group  event__field-group--time">
+      <label class="visually-hidden" for="event-start-time-1">From</label>
+      <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${formatToFullDate(
+      point.dateFrom
+    )}">
+      &mdash;
+      <label class="visually-hidden" for="event-end-time-1">To</label>
+      <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${formatToFullDate(
+      point.dateTo
+    )}">
+    </div>`);
+}
+
+function createPriceTemplate(point) {
+  return (/*html*/ `
+    <div class="event__field-group  event__field-group--price">
+      <label class="event__label" for="event-price-1">
+        <span class="visually-hidden">${point.basePrice}</span>
+        &euro;
+      </label>
+      <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${point.basePrice}">
+    </div>
+  `);
+}
+
+function createOffersTemplate(isOffers, offersByType, point) {
+  return (/*html*/`
+  ${isOffers ? /*html*/`
+  <section class="event__section  event__section--offers">
+    <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+    <div class="event__available-offers">
+      ${offersByType.map((offer) => {
+      const checked = point.offers.includes(offer.id) ? 'checked' : '';
+      return /*html*/ `
+      <div class="event__offer-selector">
+        <input class="event__offer-checkbox  visually-hidden" id="event-offer-train-1" type="checkbox" name="event-offer-train" data-offer-id=${offer.id}
+        ${checked}>
+        <label class="event__offer-label" for="event-offer-train-1">
+          <span class="event__offer-title">${offer.title}</span>
+          &plus;&euro;&nbsp;
+          <span class="event__offer-price">${offer.price}</span>
+        </label>
+      </div>`;
+    })
+      .join(' ')}
+      </div>
+    </section>` : ''}
+  `);
+}
+
+function createDestinationTemplate(isDestination, destinationsById) {
+  const { name, pictures, description } = destinationsById;
+  return (/*html*/`
+  ${isDestination ? /*html*/`
+          <section class="event__section  event__section--destination">
+            <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+            <p class="event__destination-description">${name} ${description}</p>
+            <div class="event__photos-container">
+            <div class="event__photos-tape">
+              ${pictures
+      .map(
+        (picture) => /*html*/ `
+                <img class="event__photo" src="${picture.src}" alt="${picture.description}">`
+      )
+      .join('')}
+              </div>
+            </div>
+          </section>` : ' '}
+  `);
+}
+
 function createEventEditTemplate({ state, pointDestinations, pointOffers }) {
   const { point } = state;
   const offersByType = pointOffers.find((item) => item.type.toLowerCase() === point.type.toLowerCase()).offers;
   const destinationsById = pointDestinations.find((item) => item.id === point.destination);
+
   const { name, pictures, description } = destinationsById;
+
 
   const isOffers = offersByType.length > 0;
   const isDestination = pictures.length > 0 && description;
@@ -41,80 +121,32 @@ function createEventEditTemplate({ state, pointDestinations, pointOffers }) {
               </fieldset>
             </div>
           </div>
+
           <div class="event__field-group  event__field-group--destination">
             <label class="event__label  event__type-output" for="event-destination-1">
               ${point.type}
             </label>
             <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${name}" list="destination-list-1">
             <datalist id="destination-list-1">
-              <option value="Amsterdam"></option>
-              <option value="Geneva"></option>
-              <option value="Chamonix"></option>
+             
+            <option value="Amsterdam"></option>
+            <option value="Geneva"></option>
+            <option value="Chamonix"></option>
             </datalist>
           </div>
 
-          <div class="event__field-group  event__field-group--time">
-            <label class="visually-hidden" for="event-start-time-1">From</label>
-            <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${formatToFullDate(
-    point.dateFrom
-  )}">
-            &mdash;
-            <label class="visually-hidden" for="event-end-time-1">To</label>
-            <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${formatToFullDate(
-    point.dateTo
-  )}">
-          </div>
-
-          <div class="event__field-group  event__field-group--price">
-            <label class="event__label" for="event-price-1">
-              <span class="visually-hidden">${point.basePrice}</span>
-              &euro;
-            </label>
-            <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${point.basePrice}">
-          </div>
-
+          ${createDateTemplate(point)}
+          ${createPriceTemplate(point)}
+          
           <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-                  <button class="event__reset-btn" type="reset">Delete</button>
-                  <button class="event__rollup-btn" type="button">
-                    <span class="visually-hidden">Open event</span>
-                  </button>
+          <button class="event__reset-btn" type="reset">Delete</button>
+          <button class="event__rollup-btn" type="button">
+            <span class="visually-hidden">Open event</span>
+          </button>
         </header>
         <section class="event__details">
-        ${isOffers ? /*html*/`
-        <section class="event__section  event__section--offers">
-          <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-          <div class="event__available-offers">
-            ${offersByType.map((offer) => {
-    const checked = point.offers.includes(offer.id) ? 'checked' : '';
-    return /*html*/ `
-            <div class="event__offer-selector">
-              <input class="event__offer-checkbox  visually-hidden" id="event-offer-train-1" type="checkbox" name="event-offer-train" data-offer-id=${offer.id}
-              ${checked}>
-              <label class="event__offer-label" for="event-offer-train-1">
-                <span class="event__offer-title">${offer.title}</span>
-                &plus;&euro;&nbsp;
-                <span class="event__offer-price">${offer.price}</span>
-              </label>
-            </div>`;
-  })
-    .join(' ')}
-            </div>
-          </section>` : ''}
-          ${isDestination ? /*html*/`
-          <section class="event__section  event__section--destination">
-            <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-            <p class="event__destination-description">${name} ${description}</p>
-            <div class="event__photos-container">
-            <div class="event__photos-tape">
-              ${pictures
-    .map(
-      (picture) => /*html*/ `
-                <img class="event__photo" src="${picture.src}" alt="${picture.description}">`
-    )
-    .join('')}
-              </div>
-            </div>
-          </section>` : ' '}
+          ${createOffersTemplate(isOffers, offersByType, point)}
+          ${createDestinationTemplate(isDestination, destinationsById)}
         </section>
       </form>
     </li>
