@@ -2,6 +2,7 @@ import { formatToFullDate } from '../util/point';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view';
 import { TYPES } from '../mocks/const';
 import flatpickr from 'flatpickr';
+import { toCapitalize } from '../util/common';
 
 import 'flatpickr/dist/flatpickr.min.css';
 
@@ -15,10 +16,10 @@ function createEventTypesTemplate() {
   `);
 }
 
-// function createDestinationListTemplate (pointDestinations, destinationsById) {
-//   const cityDestination = new Set(pointDestinations.map((item) => item.name));
-//   return (`${cityDestination.forEach((city) => `<option value="${city}" ${(city === destinationsById.name) ? 'selected' : ''}>${city}</option>`).join('')}`);
-// }
+function createDestinationListTemplate (pointDestinations) {
+  const cityDestinations = Array.from(new Set(pointDestinations.map((item) => item.name)));
+  return (`${cityDestinations.map((city) => `<option value="${city}">${city}</option>`).join('')}`);
+}
 
 function createDateTemplate(point) {
   return (/*html*/`
@@ -57,9 +58,9 @@ function createOffersTemplate(isOffers, offersByType, point) {
       const checked = point.offers.includes(offer.id) ? 'checked' : '';
       return /*html*/ `
       <div class="event__offer-selector">
-        <input class="event__offer-checkbox  visually-hidden" id="event-offer-train-1" type="checkbox" name="event-offer-train" data-offer-id=${offer.id}
+        <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.id}" type="checkbox" name="event-offer-${offer.id}" data-offer-id=${offer.id}
         ${checked}>
-        <label class="event__offer-label" for="event-offer-train-1">
+        <label class="event__offer-label" for="event-offer-${offer.id}">
           <span class="event__offer-title">${offer.title}</span>
           &plus;&euro;&nbsp;
           <span class="event__offer-price">${offer.price}</span>
@@ -94,7 +95,6 @@ function createDestinationTemplate(isDestination, destinationsById) {
 }
 
 function createEventEditTemplate({ state, pointDestinations, pointOffers }) {
-  // console.log(pointDestinations);
   const { point } = state;
   const offersByType = pointOffers.find((item) => item.type.toLowerCase() === point.type.toLowerCase()).offers;
   const destinationsById = pointDestinations.find((item) => item.id === point.destination);
@@ -103,7 +103,7 @@ function createEventEditTemplate({ state, pointDestinations, pointOffers }) {
 
 
   const isOffers = offersByType.length > 0;
-  const isDestination = pictures.length > 0 && description;
+  const isDestination = pictures.length > 0 || description;
 
   return /*html*/ `
     <li class="trip-events__item">
@@ -129,9 +129,7 @@ function createEventEditTemplate({ state, pointDestinations, pointOffers }) {
             </label>
             <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${name}" list="destination-list-1">
             <datalist id="destination-list-1">
-            <option value="Amsterdam"></option>
-            <option value="Geneva"></option>
-            <option value="Chamonix"></option>
+            ${createDestinationListTemplate(pointDestinations, destinationsById)}
             </datalist>
           </div>
 
@@ -241,14 +239,19 @@ export default class EventEditView extends AbstractStatefulView {
   };
 
   #destionationChangeHandler = (evt) => {
-    const selectedDestination = this.#pointDestinations.find((pointDestination) => pointDestination.name === evt.target.value);
+    const selectedDestination = this.#pointDestinations.find((pointDestination) => pointDestination.name === toCapitalize(evt.target.value));
     const selectedDestinationId = (selectedDestination) ? selectedDestination.id : null;
-    this.updateElement({
-      point: {
-        ...this._state.point,
-        destination: selectedDestinationId
-      }
-    });
+
+    if (selectedDestinationId === null) {
+      alert('упс... такой город не найден(');
+    } else {
+      this.updateElement({
+        point: {
+          ...this._state.point,
+          destination: selectedDestinationId
+        }
+      });
+    }
   };
 
   #offerChangeHandler = () => {
