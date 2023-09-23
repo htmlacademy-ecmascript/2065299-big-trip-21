@@ -6,11 +6,11 @@ import { toCapitalize } from '../util/common';
 
 import 'flatpickr/dist/flatpickr.min.css';
 
-function createEventTypesTemplate() {
+function createEventTypesTemplate(point) {
   return (/*html*/`
   ${TYPES.map((eventType) => /*html*/`
     <div class="event__type-item">
-      <input id="event-type-${eventType.toLowerCase()}-1" class="event__type-input visually-hidden" type="radio" name="event-type" value="${eventType.toLowerCase()}" ${eventType.toLowerCase() === eventType.toLowerCase() ? 'checked' : ''}>
+      <input id="event-type-${eventType.toLowerCase()}-1" class="event__type-input visually-hidden" type="radio" name="event-type" value="${eventType.toLowerCase()}" ${point.type.toLowerCase() === eventType.toLowerCase() ? 'checked' : ''}>
       <label class="event__type-label event__type-label--${eventType.toLowerCase()}" for="event-type-${eventType.toLowerCase()}-1">${eventType}</label>
     </div>`).join('')}
   `);
@@ -118,7 +118,7 @@ function createEventEditTemplate({ state, pointDestinations, pointOffers }) {
             <div class="event__type-list">
               <fieldset class="event__type-group">
                 <legend class="visually-hidden">Event type</legend>
-                ${createEventTypesTemplate()}
+                ${createEventTypesTemplate(point)}
               </fieldset>
             </div>
           </div>
