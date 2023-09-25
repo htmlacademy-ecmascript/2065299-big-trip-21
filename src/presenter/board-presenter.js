@@ -4,9 +4,9 @@ import NoPointView from '../view/no-point-view';
 import PointPresenter from './point-presenter';
 import { render, RenderPosition, replace, remove } from '../framework/render';
 import { updateItem } from '../util/common';
-import { SORT_TYPE } from '../mocks/const';
+import { SortTypes } from '../mocks/const';
 import { enabledSortType } from '../mocks/const';
-import { sortFunctions } from '../util/sort-functions';
+import { sortBy } from '../util/sort-by';
 
 export default class BoardPresenter {
   #eventListComponent = new EventsListView();
@@ -16,7 +16,9 @@ export default class BoardPresenter {
   #destinationsModel = null;
   #offersModel = null;
   #points = [];
-  #currentSortType = SORT_TYPE.DAY;
+  #defaultSortType = SortTypes.DAY;
+  #currentSortType = SortTypes.DAY;
+
 
   #pointPresenters = new Map();
 
@@ -38,7 +40,7 @@ export default class BoardPresenter {
   };
 
 
-  #renderPoint (point) {
+  #renderPoint(point) {
     const pointPresenter = new PointPresenter({
       container: this.#eventListComponent.element,
       destinationsModel: this.#destinationsModel,
@@ -54,7 +56,7 @@ export default class BoardPresenter {
   #renderSort() {
     const prevSortComponent = this.#sortComponent;
 
-    const sortTypes = Object.values(SORT_TYPE)
+    const sortTypes = Object.values(SortTypes)
       .map((type) => ({
         type,
         isChecked: (type === this.#currentSortType),
@@ -83,7 +85,7 @@ export default class BoardPresenter {
 
   #sortPoints = (sortType) => {
     this.#currentSortType = sortType;
-    this.#points = sortFunctions[this.#currentSortType](this.#points);
+    this.#points = sortBy[this.#currentSortType](this.#points);
   };
 
   #renderPointsContainer() {
@@ -105,6 +107,12 @@ export default class BoardPresenter {
     render(this.#noPointComponent, this.#boardContainer);
   }
 
+  #renderDefaultPoints() {
+    sortBy[this.#defaultSortType](this.#points).forEach((point) => {
+      this.#renderPoint(point);
+    });
+  }
+
   #renderBoard() {
     if(this.#points.length === 0) {
       this.#renderNoPoint();
@@ -113,7 +121,7 @@ export default class BoardPresenter {
 
     this.#renderSort();
     this.#renderPointsContainer();
-    this.#renderPoints();
+    this.#renderDefaultPoints();
   }
 
   init() {

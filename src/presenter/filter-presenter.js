@@ -1,5 +1,5 @@
 import FilterView from '../view/filter-view';
-import { filterFunctions } from '../util/filter-functions';
+import { filterBy } from '../util/filter-by';
 import { render } from '../framework/render';
 
 export default class FilterPresenter {
@@ -11,7 +11,7 @@ export default class FilterPresenter {
     this.#container = container;
     this.#pointsModel = pointsModel;
 
-    this.#filters = Object.entries(filterFunctions)
+    this.#filters = Object.entries(filterBy)
       .map(([filterType, filterPoints], index) => ({
         type: filterType,
         isChecked: index === 0,
