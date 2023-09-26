@@ -75,6 +75,18 @@ const enabledSortType = {
   [SortTypes.OFFERS]: false,
 };
 
+const UserAction = {
+  UPDATE_POINT: 'UPDATE_POINT',
+  DELETE_POINT: 'DELETE_POINT',
+  CREATE_POINT: 'CREATE_POINT',
+};
+
+const UpdateType = {
+  PATCH: 'PATCH',
+  MINOR: 'MINOR',
+  MAJOR: 'MAJOR',
+};
+
 export {
   POINT_COUNT,
   CITIES,
@@ -90,5 +102,7 @@ export {
   DESTINATION_COUNT,
   FilterTypes,
   SortTypes,
-  enabledSortType
+  enabledSortType,
+  UpdateType,
+  UserAction
 };

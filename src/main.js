@@ -6,6 +6,7 @@ import DestinationsModel from './model/destinations-model';
 import OffersModel from './model/offers-model';
 import PointsModel from './model/points-model';
 import FilterPresenter from './presenter/filter-presenter';
+import FilterModel from './model/filter-model';
 
 const tripInfoElement = document.querySelector('.trip-main');
 const filterElement = document.querySelector('.trip-controls__filters');
@@ -15,12 +16,14 @@ const mockService = new MockService();
 const destinationsModel = new DestinationsModel(mockService);
 const offersModel = new OffersModel(mockService);
 const pointsModel = new PointsModel(mockService);
+const filterModel = new FilterModel;
 
 const boardPresenter = new BoardPresenter({
   boardContainer: tripEventsElement,
   destinationsModel,
   offersModel,
   pointsModel,
+  filterModel
 });
 
 const filterPresenter = new FilterPresenter({

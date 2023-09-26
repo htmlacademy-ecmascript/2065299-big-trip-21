@@ -3,40 +3,47 @@ import SortView from '../view/sort-view';
 import NoPointView from '../view/no-point-view';
 import PointPresenter from './point-presenter';
 import { render, RenderPosition, replace, remove } from '../framework/render';
-import { updateItem } from '../util/common';
-import { SortTypes } from '../mocks/const';
-import { enabledSortType } from '../mocks/const';
+import { SortTypes, UpdateType, UserAction, enabledSortType } from '../mocks/const';
 import { sortBy } from '../util/sort-by';
+import { filterBy } from '../util/filter-by';
 
 export default class BoardPresenter {
   #eventListComponent = new EventsListView();
   #sortComponent = null;
   #noPointComponent = new NoPointView();
   #boardContainer = null;
+
   #destinationsModel = null;
   #offersModel = null;
-  #points = [];
+  #pointsModel = null;
+  #filterModel = null;
+
   #defaultSortType = SortTypes.DAY;
   #currentSortType = SortTypes.DAY;
 
 
   #pointPresenters = new Map();
 
-  constructor({boardContainer, destinationsModel, offersModel, pointsModel}) {
+  constructor({boardContainer, destinationsModel, offersModel, pointsModel, filterModel}) {
     this.#boardContainer = boardContainer;
     this.#destinationsModel = destinationsModel;
     this.#offersModel = offersModel;
+    this.#pointsModel = pointsModel;
+    this.#filterModel = filterModel;
 
-    this.#points = [...pointsModel.get()];
+    this.#pointsModel.addObserver(this.#modelEventHandler);
+    this.#filterModel.addObserver(this.#modelEventHandler);
+  }
+
+  get points() {
+    const filterType = this.#filterModel.get();
+    const filteredPoints = filterBy[filterType](this.#pointsModel.get());
+
+    return sortBy[this.#currentSortType](filteredPoints);
   }
 
   #handleModeChange = () => {
     this.#pointPresenters.forEach((presenter) => presenter.resetView());
-  };
-
-  #handlePointChange = (updatedPoint) => {
-    this.#points = updateItem(this.#points, updatedPoint);
-    this.#pointPresenters.get(updatedPoint.id).init(updatedPoint);
   };
 
 
@@ -45,7 +52,7 @@ export default class BoardPresenter {
       container: this.#eventListComponent.element,
       destinationsModel: this.#destinationsModel,
       offersModel: this.#offersModel,
-      onDataChange: this.#handlePointChange,
+      onDataChange: this.#handleViewAction,
       onModeChange: this.#handleModeChange
     });
 
@@ -75,6 +82,46 @@ export default class BoardPresenter {
     }
   }
 
+  #clearBoard = ({resetSortType = false} = {}) => {
+    this.#clearPoints();
+    remove(this.#sortComponent);
+    this.#sortComponent = null;
+
+    if(resetSortType) {
+      this.#currentSortType = SortTypes.DAY;
+    }
+  };
+
+  #handleViewAction = (actionType, updateType, update) => {
+    switch (updateType) {
+      case UserAction.UPDATE_POINT:
+        this.#pointsModel.update(updateType, update);
+        break;
+      case UserAction.CREATE_POINT:
+        this.#pointsModel.add(updateType, update);
+        break;
+      case UserAction.DELETE_POINT:
+        this.#pointsModel.delete(updateType, update);
+        break;
+    }
+  };
+
+  #modelEventHandler = (updateType, data) => {
+    switch (updateType) {
+      case UpdateType.PATCH:
+        this.#pointPresenters?.get(data.id)?.init(data);
+        break;
+      case UpdateType.MINOR:
+        this.#clearBoard();
+        this.#renderBoard();
+        break;
+      case UpdateType.MAJOR:
+        this.#clearBoard({resetSortType: true});
+        this.#renderBoard();
+        break;
+    }
+  };
+
   #sortTypeChangeHandler = (sortType) => {
     this.#sortPoints(sortType);
     this.#clearPoints();
@@ -85,7 +132,7 @@ export default class BoardPresenter {
 
   #sortPoints = (sortType) => {
     this.#currentSortType = sortType;
-    this.#points = sortBy[this.#currentSortType](this.#points);
+    this.points = sortBy[this.#currentSortType](this.points);
   };
 
   #renderPointsContainer() {
@@ -93,7 +140,7 @@ export default class BoardPresenter {
   }
 
   #renderPoints() {
-    this.#points.forEach((point) => {
+    this.points.forEach((point) => {
       this.#renderPoint(point);
     });
   }
@@ -108,13 +155,13 @@ export default class BoardPresenter {
   }
 
   #renderDefaultPoints() {
-    sortBy[this.#defaultSortType](this.#points).forEach((point) => {
+    sortBy[this.#defaultSortType](this.points).forEach((point) => {
       this.#renderPoint(point);
     });
   }
 
   #renderBoard() {
-    if(this.#points.length === 0) {
+    if(this.points.length === 0) {
       this.#renderNoPoint();
       return;
     }
