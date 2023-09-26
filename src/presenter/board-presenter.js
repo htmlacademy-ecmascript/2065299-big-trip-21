@@ -123,17 +123,13 @@ export default class BoardPresenter {
   };
 
   #sortTypeChangeHandler = (sortType) => {
-    this.#sortPoints(sortType);
+    this.#currentSortType = sortType;
     this.#clearPoints();
     this.#renderSort();
     this.#renderPoints();
 
   };
 
-  #sortPoints = (sortType) => {
-    this.#currentSortType = sortType;
-    this.points = sortBy[this.#currentSortType](this.points);
-  };
 
   #renderPointsContainer() {
     render(this.#eventListComponent, this.#boardContainer);
