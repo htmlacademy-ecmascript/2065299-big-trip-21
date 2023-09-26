@@ -130,7 +130,6 @@ export default class BoardPresenter {
 
   };
 
-
   #renderPointsContainer() {
     render(this.#eventListComponent, this.#boardContainer);
   }
