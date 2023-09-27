@@ -18,7 +18,6 @@ export default class BoardPresenter {
   #pointsModel = null;
   #filterModel = null;
 
-  #defaultSortType = SortTypes.DAY;
   #currentSortType = SortTypes.DAY;
 
 
@@ -149,12 +148,6 @@ export default class BoardPresenter {
     render(this.#noPointComponent, this.#boardContainer);
   }
 
-  #renderDefaultPoints() {
-    sortBy[this.#defaultSortType](this.points).forEach((point) => {
-      this.#renderPoint(point);
-    });
-  }
-
   #renderBoard() {
     if(this.points.length === 0) {
       this.#renderNoPoint();
@@ -163,7 +156,7 @@ export default class BoardPresenter {
 
     this.#renderSort();
     this.#renderPointsContainer();
-    this.#renderDefaultPoints();
+    this.#renderPoints();
   }
 
   init() {

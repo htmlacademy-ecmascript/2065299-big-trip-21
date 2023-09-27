@@ -32,7 +32,8 @@ const boardPresenter = new BoardPresenter({
 
 const filterPresenter = new FilterPresenter({
   container: filterElement,
-  pointsModel
+  pointsModel,
+  filterModel
 });
 
 render(new TripInfoView(), tripInfoElement, RenderPosition.AFTERBEGIN);
