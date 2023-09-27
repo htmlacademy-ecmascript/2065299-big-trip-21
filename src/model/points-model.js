@@ -34,5 +34,6 @@ export default class PointsModel extends Observable {
   delete(updateType, point) {
     this.#service.deletePoint(point);
     this.#points = this.#points.filter((pointItem) => pointItem.id !== point.id);
+    this._notify(updateType);
   }
 }

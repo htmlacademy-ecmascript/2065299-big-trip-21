@@ -2,6 +2,7 @@ import EventEditView from '../view/event-edit-view';
 import PointView from '../view/point-view';
 import { render, replace, remove } from '../framework/render';
 import { UpdateType, UserAction } from '../mocks/const';
+import { isBigDifferance } from '../util/point';
 
 const MODE = {
   DEFAULT: 'DEFAULT',
@@ -47,7 +48,8 @@ export default class PointPresenter {
       pointDestinations: this.#destinationsModel.get(),
       pointOffers: this.#offersModel.get(),
       onFormSubmit: this.#handleFormSubmit,
-      onHideBtnClick: this.#handleHideBtnClick
+      onHideBtnClick: this.#handleHideBtnClick,
+      onDeleteClick: this.#handleDeleteClick
     });
 
     if (prevPointComponent === null || prevPointEditComponent === null) {
@@ -88,6 +90,7 @@ export default class PointPresenter {
   #replaceFormToPoint() {
     replace(this.#pointComponent, this.#editPointComponent);
     this.#mode = MODE.DEFAULT;
+    document.removeEventListener('keydown', this.#escKeyDownHandler);
   }
 
   #escKeyDownHandler = (evt) => {
@@ -95,7 +98,7 @@ export default class PointPresenter {
       evt.preventDefault();
       this.#editPointComponent.reset(this.#point);
       this.#replaceFormToPoint();
-      document.removeEventListener('keydown', this.#escKeyDownHandler);
+
     }
   };
 
@@ -104,16 +107,19 @@ export default class PointPresenter {
     document.addEventListener('keydown', this.#escKeyDownHandler);
   };
 
-  #handleFormSubmit = (point) => {
-    this.#handleDataChange(point);
+  #handleFormSubmit = (updatedPoint) => {
+    const isMinor = isBigDifferance(updatedPoint, this.#point);
+
+    this.#handleDataChange(
+      UserAction.UPDATE_POINT, isMinor ? UpdateType.MINOR : UpdateType.PATCH,
+      updatedPoint
+    );
     this.#replaceFormToPoint();
-    document.removeEventListener('keydown', this.#escKeyDownHandler);
   };
 
   #handleHideBtnClick = () => {
     this.#editPointComponent.reset(this.#point);
     this.#replaceFormToPoint();
-    document.removeEventListener('keydown', this.#escKeyDownHandler);
   };
 
   #handleFavoriteClick = () => {
@@ -125,5 +131,9 @@ export default class PointPresenter {
         isFavorite: !this.#point.isFavorite
       }
     );
+  };
+
+  #handleDeleteClick = (point) => {
+    this.#handleDataChange(UserAction.DELETE_POINT, UpdateType.MINOR, point);
   };
 }

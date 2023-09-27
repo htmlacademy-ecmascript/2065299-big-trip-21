@@ -93,7 +93,7 @@ export default class BoardPresenter {
   };
 
   #handleViewAction = (actionType, updateType, update) => {
-    switch (updateType) {
+    switch (actionType) {
       case UserAction.UPDATE_POINT:
         this.#pointsModel.update(updateType, update);
         break;
