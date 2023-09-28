@@ -20,11 +20,9 @@ export default class BoardPresenter {
   #filterModel = null;
   #newPointButtonPresenter = null;
   #newPointPresenter = null;
-  #isCreating = false;
   #currentSortType = SortTypes.DAY;
-
-
   #pointPresenters = new Map();
+  #isCreating = false;
 
   constructor({boardContainer, destinationsModel, offersModel, pointsModel, filterModel, newPointButtonPresenter}) {
     this.#boardContainer = boardContainer;
@@ -183,7 +181,7 @@ export default class BoardPresenter {
   }
 
   #renderBoard() {
-    if(this.points.length === 0) {
+    if(this.points.length === 0 && !this.#isCreating) {
       this.#renderNoPoint();
       return;
     }
