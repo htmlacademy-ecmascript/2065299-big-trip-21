@@ -92,7 +92,7 @@ function sortPointsByPrice(a, b) {
   return a.basePrice > b.basePrice ? -1 : 1;
 }
 
-function isBigDifferance(pointA, pointB) {
+function isBigDifference(pointA, pointB) {
   return (
     pointA.dateFrom !== pointB.dateFrom ||
     pointA.basePrice !== pointB.basePrice ||
@@ -114,5 +114,5 @@ export {
   sortPointsByDate,
   sortPointsByPrice,
   sortPointsByTime,
-  isBigDifferance
+  isBigDifference
 };

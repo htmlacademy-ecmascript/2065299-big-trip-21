@@ -49,7 +49,7 @@ const TYPES = [
 ];
 const DEFAULT_TYPE = 'flight';
 
-const DATE_FORMAT = 'DD/MMM';
+const DATE_FORMAT = 'MMM DD';
 const TIME_FORMAT = 'HH:mm';
 const FULL_DATE_FORMAT = 'DD/MM/YY HH:mm';
 

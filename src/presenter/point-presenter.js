@@ -2,7 +2,7 @@ import EventEditView from '../view/event-edit-view';
 import PointView from '../view/point-view';
 import { render, replace, remove } from '../framework/render';
 import { UpdateType, UserAction } from '../mocks/const';
-import { isBigDifferance } from '../util/point';
+import { isBigDifference } from '../util/point';
 
 const MODE = {
   DEFAULT: 'DEFAULT',
@@ -108,7 +108,7 @@ export default class PointPresenter {
   };
 
   #handleFormSubmit = (updatedPoint) => {
-    const isMinor = isBigDifferance(updatedPoint, this.#point);
+    const isMinor = isBigDifference(updatedPoint, this.#point);
 
     this.#handleDataChange(
       UserAction.UPDATE_POINT, isMinor ? UpdateType.MINOR : UpdateType.PATCH,
