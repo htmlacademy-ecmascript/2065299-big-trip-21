@@ -29,7 +29,7 @@ export default class NewPointPresenter {
       pointOffers: this.#offersModel.get(),
       onResetClick: this.#resetClickHandler,
       onFormSubmit: this.#formSubmitHandler,
-      type: EditType.CREATING
+      editMode: EditType.CREATING
     });
 
     render(this.#pointNewComponent, this.#container, RenderPosition.AFTERBEGIN);
