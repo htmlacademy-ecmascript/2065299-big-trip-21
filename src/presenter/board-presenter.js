@@ -10,7 +10,7 @@ import { filterBy } from '../util/filter-by';
 export default class BoardPresenter {
   #eventListComponent = new EventsListView();
   #sortComponent = null;
-  #noPointComponent = new NoPointView();
+  #noPointComponent = null;
   #boardContainer = null;
 
   #destinationsModel = null;
@@ -142,9 +142,13 @@ export default class BoardPresenter {
   #clearPoints() {
     this.#pointPresenters.forEach((presenter) => presenter.destroy());
     this.#pointPresenters.clear();
+    remove(this.#noPointComponent);
   }
 
   #renderNoPoint() {
+    this.#noPointComponent = new NoPointView({
+      filterType: this.#filterModel.get()
+    });
     render(this.#noPointComponent, this.#boardContainer);
   }
 
