@@ -3,9 +3,10 @@ import SortView from '../view/sort-view';
 import NoPointView from '../view/no-point-view';
 import PointPresenter from './point-presenter';
 import { render, RenderPosition, replace, remove } from '../framework/render';
-import { SortTypes, UpdateType, UserAction, enabledSortType } from '../mocks/const';
+import { SortTypes, UpdateType, UserAction, enabledSortType, FilterTypes } from '../mocks/const';
 import { sortBy } from '../util/sort-by';
 import { filterBy } from '../util/filter-by';
+import NewPointPresenter from './new-point-presenter';
 
 export default class BoardPresenter {
   #eventListComponent = new EventsListView();
@@ -17,18 +18,29 @@ export default class BoardPresenter {
   #offersModel = null;
   #pointsModel = null;
   #filterModel = null;
+  #newPointButtonPresenter = null;
+  #newPointPresenter = null;
 
   #currentSortType = SortTypes.DAY;
-
+  #isCreating = false;
 
   #pointPresenters = new Map();
 
-  constructor({boardContainer, destinationsModel, offersModel, pointsModel, filterModel}) {
+  constructor({boardContainer, destinationsModel, offersModel, pointsModel, filterModel, newPointButtonPresenter}) {
     this.#boardContainer = boardContainer;
     this.#destinationsModel = destinationsModel;
     this.#offersModel = offersModel;
     this.#pointsModel = pointsModel;
     this.#filterModel = filterModel;
+    this.#newPointButtonPresenter = newPointButtonPresenter;
+
+    this.#newPointPresenter = new NewPointPresenter({
+      container: this.#eventListComponent.element,
+      destinationsModel: this.#destinationsModel,
+      offersModel: this.#offersModel,
+      onPointChange: this.#handleViewAction,
+      onDestroy: this.#newPointDestroyHandler,
+    });
 
     this.#pointsModel.addObserver(this.#modelEventHandler);
     this.#filterModel.addObserver(this.#modelEventHandler);
@@ -40,6 +52,14 @@ export default class BoardPresenter {
 
     return sortBy[this.#currentSortType](filteredPoints);
   }
+
+  newPointButtonClickHandler = () => {
+    this.#isCreating = true;
+    this.#currentSortType = SortTypes.DAY;
+    this.#filterModel.set(UpdateType.MAJOR, FilterTypes.EVERYTHING);
+    this.#newPointButtonPresenter.disableButton();
+    this.#newPointPresenter.init();
+  };
 
   #handleModeChange = () => {
     this.#pointPresenters.forEach((presenter) => presenter.resetView());
@@ -88,6 +108,15 @@ export default class BoardPresenter {
 
     if(resetSortType) {
       this.#currentSortType = SortTypes.DAY;
+    }
+  };
+
+  #newPointDestroyHandler = ({isCanceled}) => {
+    this.#isCreating = false;
+    this.#newPointButtonPresenter.enableButton();
+    if (this.points.length === 0 && isCanceled) {
+      this.#clearBoard();
+      this.#renderBoard();
     }
   };
 
@@ -143,6 +172,7 @@ export default class BoardPresenter {
     this.#pointPresenters.forEach((presenter) => presenter.destroy());
     this.#pointPresenters.clear();
     remove(this.#noPointComponent);
+    this.#newPointPresenter.destroy();
   }
 
   #renderNoPoint() {

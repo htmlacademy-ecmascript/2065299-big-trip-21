@@ -47,6 +47,7 @@ const TYPES = [
   'Sightseeing',
   'Restaurant',
 ];
+const DEFAULT_TYPE = 'flight';
 
 const DATE_FORMAT = 'DD/MMM';
 const TIME_FORMAT = 'HH:mm';
@@ -94,6 +95,21 @@ const NoPointText = {
   PAST : 'There are no past events now',
 };
 
+const EditType = {
+  EDITING: 'EDITING',
+  CREATING: 'CREATING',
+};
+
+const POINT_EMPTY = {
+  basePrice: 0,
+  dateFrom: null,
+  dateTo: null,
+  destination: null,
+  isFavorite: false,
+  offers: [],
+  type: DEFAULT_TYPE,
+};
+
 export {
   POINT_COUNT,
   CITIES,
@@ -111,5 +127,8 @@ export {
   SortTypes,
   enabledSortType,
   UpdateType,
-  UserAction, NoPointText
+  UserAction,
+  NoPointText,
+  EditType,
+  POINT_EMPTY
 };

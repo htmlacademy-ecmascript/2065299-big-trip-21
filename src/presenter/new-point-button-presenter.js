@@ -12,7 +12,7 @@ export default class NewPointButtonPresenter {
 
   init({onButtonClick}) {
     this.#handleButtonClick = onButtonClick;
-    this.#button = new NewPointButtonVeiw({onNewPointButtonClick: this.#buttonClickHandler});
+    this.#button = new NewPointButtonVeiw({onButtonClick: this.#buttonClickHandler});
     render(this.#button, this.#container);
   }
 

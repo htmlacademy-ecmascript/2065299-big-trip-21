@@ -1,6 +1,6 @@
 import { formatToFullDate } from '../util/point';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view';
-import { TYPES } from '../mocks/const';
+import { EditType, TYPES, POINT_EMPTY } from '../mocks/const';
 import flatpickr from 'flatpickr';
 import { toCapitalize } from '../util/common';
 
@@ -94,13 +94,17 @@ function createDestinationTemplate(isDestination, destinationsById) {
   `);
 }
 
-function createEventEditTemplate({ state, pointDestinations, pointOffers }) {
+function createEventEditTemplate({ state, pointDestinations, pointOffers, type}) {
   const { point } = state;
   const offersByType = pointOffers.find((item) => item.type.toLowerCase() === point.type.toLowerCase()).offers;
   const destinationsById = pointDestinations.find((item) => item.id === point.destination);
 
   const { name, pictures, description } = destinationsById;
-
+  const isCreating = type === EditType.CREATING;
+  const rollUpTemplate = () => /*html*/ `
+  <button class="event__rollup-btn" type="button">
+    <span class="visually-hidden">Open event</span>
+  </button>`;
 
   const isOffers = offersByType.length > 0;
   const isDestination = pictures.length > 0 || description;
@@ -137,8 +141,8 @@ function createEventEditTemplate({ state, pointDestinations, pointOffers }) {
           ${createPriceTemplate(point)}
           
           <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-          <button class="event__reset-btn" type="reset">Delete</button>
-          <button class="event__rollup-btn" type="button">
+          <button class="event__reset-btn" type="reset">${isCreating ? 'Cancel' : 'Delete'}</button>
+          ${isCreating ? '' : rollUpTemplate()}
             <span class="visually-hidden">Open event</span>
           </button>
         </header>
@@ -161,7 +165,9 @@ export default class EventEditView extends AbstractStatefulView {
   #datepickerFrom = null;
   #datepickerTo = null;
 
-  constructor({ point, pointDestinations, pointOffers, onFormSubmit, onHideBtnClick, onDeleteClick }) {
+  #type;
+
+  constructor({ point = POINT_EMPTY, pointDestinations, pointOffers, onFormSubmit, onHideBtnClick, onDeleteClick, type = EditType.EDITING}) {
     super();
     this._state = point;
     this.#pointDestinations = pointDestinations;
@@ -172,6 +178,7 @@ export default class EventEditView extends AbstractStatefulView {
 
     this._setState(EventEditView.parsePointToState({point}));
     this._restoreHandlers();
+    this.#type = type;
   }
 
   get template() {
@@ -179,6 +186,7 @@ export default class EventEditView extends AbstractStatefulView {
       state: this._state,
       pointDestinations: this.#pointDestinations,
       pointOffers: this.#pointOffers,
+      type: this.#type,
     });
   }
 
@@ -225,7 +233,7 @@ export default class EventEditView extends AbstractStatefulView {
 
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
-    this.#handleFormSubmit(this._state);
+    this.#handleFormSubmit(EventEditView.parseStateToPoint(this._state));
   };
 
   #deleteBtnClickHandler = (evt) => {
