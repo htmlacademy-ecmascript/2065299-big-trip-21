@@ -20,9 +20,9 @@ export default class BoardPresenter {
   #filterModel = null;
   #newPointButtonPresenter = null;
   #newPointPresenter = null;
-
-  #currentSortType = SortTypes.DAY;
   #isCreating = false;
+  #currentSortType = SortTypes.DAY;
+
 
   #pointPresenters = new Map();
 

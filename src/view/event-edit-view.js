@@ -22,16 +22,16 @@ function createDestinationListTemplate (pointDestinations) {
 }
 
 function createDateTemplate(dateFrom,
-  dateTo) {
+  dateTo, isCreating) {
   return (/*html*/`
     <div class="event__field-group  event__field-group--time">
       <label class="visually-hidden" for="event-start-time-1">From</label>
-      <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${formatToFullDate(
+      <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${isCreating ? '' : formatToFullDate(
       dateFrom
     )}">
       &mdash;
       <label class="visually-hidden" for="event-end-time-1">To</label>
-      <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${formatToFullDate(
+      <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${isCreating ? '' : formatToFullDate(
       dateTo
     )}">
     </div>`);
@@ -44,7 +44,7 @@ function createPriceTemplate(basePrice) {
         <span class="visually-hidden">${basePrice}</span>
         &euro;
       </label>
-      <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${basePrice}">
+      <input class="event__input  event__input--price" type="number" pattern="^[ 0-9]+$" id="event-price-1" type="text" name="event-price" value="${basePrice}">
     </div>
   `);
 }
@@ -74,16 +74,15 @@ function createOffersTemplate(isOffers, offersByType, offers) {
   `);
 }
 
-function createDestinationTemplate(isDestination, destinationsById) {
-  const { name, pictures, description } = destinationsById;
+function createDestinationTemplate(isDestination, currentDestination) {
   return (/*html*/`
-  ${isDestination ? /*html*/`
+  ${isDestination || currentDestination ? /*html*/`
           <section class="event__section  event__section--destination">
             <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-            <p class="event__destination-description">${name} ${description}</p>
+            <p class="event__destination-description">${name} ${currentDestination.description}</p>
             <div class="event__photos-container">
             <div class="event__photos-tape">
-              ${pictures
+              ${currentDestination.pictures
       .map(
         (picture) => /*html*/ `
                 <img class="event__photo" src="${picture.src}" alt="${picture.description}">`
@@ -104,9 +103,8 @@ function createEventEditTemplate({ state, pointDestinations, pointOffers, editMo
     offers
   } = state.point;
   const offersByType = pointOffers.find((item) => item.type.toLowerCase() === type.toLowerCase()).offers;
-  const destinationsById = pointDestinations.find((item) => item.id === state.point.destination);
+  const currentDestination = pointDestinations.find((item) => item.id === state.point.destination);
 
-  const { name, pictures, description } = destinationsById;
   const isCreating = editMode === EditType.CREATING;
   const rollUpTemplate = () => /*html*/ `
   <button class="event__rollup-btn" type="button">
@@ -114,7 +112,7 @@ function createEventEditTemplate({ state, pointDestinations, pointOffers, editMo
   </button>`;
 
   const isOffers = offersByType.length > 0;
-  const isDestination = pictures.length > 0 || description;
+  const isDestination = currentDestination?.pictures.length > 0 || currentDestination?.description;
 
   return /*html*/ `
     <li class="trip-events__item">
@@ -138,13 +136,13 @@ function createEventEditTemplate({ state, pointDestinations, pointOffers, editMo
             <label class="event__label  event__type-output" for="event-destination-1">
               ${type}
             </label>
-            <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${name}" list="destination-list-1">
+            <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${currentDestination ? currentDestination.name : ''}" list="destination-list-1">
             <datalist id="destination-list-1">
-            ${createDestinationListTemplate(pointDestinations, destinationsById)}
+            ${createDestinationListTemplate(pointDestinations, currentDestination)}
             </datalist>
           </div>
 
-          ${createDateTemplate(dateFrom, dateTo)}
+          ${createDateTemplate(dateFrom, dateTo, isCreating)}
           ${createPriceTemplate(basePrice)}
           
           <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -155,7 +153,7 @@ function createEventEditTemplate({ state, pointDestinations, pointOffers, editMo
         </header>
         <section class="event__details">
           ${createOffersTemplate(isOffers, offersByType, offers)}
-          ${createDestinationTemplate(isDestination, destinationsById)}
+          ${createDestinationTemplate(isDestination, currentDestination)}
         </section>
       </form>
     </li>
@@ -214,14 +212,20 @@ export default class EventEditView extends AbstractStatefulView {
   };
 
   _restoreHandlers = () => {
+    if (this.#editMode === EditType.EDITING) {
+      this.element.querySelector('.event__rollup-btn')
+        .addEventListener('click', this.#hideBtnClickHandler);
+
+      this.element.querySelector('.event__reset-btn')
+        .addEventListener('click', this.#deleteBtnClickHandler);
+    }
+    if (this.#editMode === EditType.CREATING) {
+      this.element.querySelector('.event__reset-btn')
+        .addEventListener('click', this.#hideBtnClickHandler);
+    }
+
     this.element.querySelector('.event')
       .addEventListener('submit', this.#formSubmitHandler);
-
-    this.element.querySelector('.event__reset-btn')
-      .addEventListener('click', this.#deleteBtnClickHandler);
-
-    this.element.querySelector('.event__rollup-btn')
-      .addEventListener('click', this.#hideBtnClickHandler);
 
     this.element.querySelector('.event__input--destination')
       .addEventListener('change', this.#destionationChangeHandler);
@@ -265,13 +269,13 @@ export default class EventEditView extends AbstractStatefulView {
   };
 
   #destionationChangeHandler = (evt) => {
-    const selectedDestination = this.#pointDestinations.find((pointDestination) => pointDestination.name === toCapitalize(evt.target.value));
-    const selectedDestinationId = (selectedDestination) ? selectedDestination.id : this._state.point.destination;
+    const currentDestination = this.#pointDestinations.find((pointDestination) => pointDestination.name === toCapitalize(evt.target.value));
+    const currentDestinationId = (currentDestination) ? currentDestination.id : this._state.point.destination;
 
     this.updateElement({
       point: {
         ...this._state.point,
-        destination: selectedDestinationId
+        destination: currentDestinationId
       }
     });
 
