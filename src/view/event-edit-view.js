@@ -212,17 +212,24 @@ export default class EventEditView extends AbstractStatefulView {
   };
 
   _restoreHandlers = () => {
-    if (this.#editMode === EditType.EDITING) {
-      this.element.querySelector('.event__rollup-btn')
-        .addEventListener('click', this.#hideBtnClickHandler);
+    // if(this.#editMode === EditType.EDITING) {
+    //   this.element.querySelector('.event__rollup-btn')
+    //     .addEventListener('click', this.#hideBtnClickHandler);
 
-      this.element.querySelector('.event__reset-btn')
-        .addEventListener('click', this.#deleteBtnClickHandler);
-    }
-    if (this.#editMode === EditType.CREATING) {
-      this.element.querySelector('.event__reset-btn')
-        .addEventListener('click', this.#hideBtnClickHandler);
-    }
+    //   this.element.querySelector('.event__reset-btn')
+    //     .addEventListener('click', this.#deleteBtnClickHandler);
+    // }
+    // if(this.#editMode === EditType.CREATING) {
+    //   this.element.querySelector('.event__reset-btn')
+    //     .addEventListener('click', this.#hideBtnClickHandler);
+    // }
+
+
+    this.element.querySelector('.event__rollup-btn')
+      .addEventListener('click', this.#hideBtnClickHandler);
+
+    this.element.querySelector('.event__reset-btn')
+      .addEventListener('click', this.#deleteBtnClickHandler);
 
     this.element.querySelector('.event')
       .addEventListener('submit', this.#formSubmitHandler);
