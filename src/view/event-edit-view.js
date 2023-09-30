@@ -136,7 +136,7 @@ function createEventEditTemplate({ state, pointDestinations, pointOffers, editMo
             <label class="event__label  event__type-output" for="event-destination-1">
               ${type}
             </label>
-            <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${currentDestination ? currentDestination.name : ''}" list="destination-list-1">
+            <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${currentDestination ? currentDestination.name : ''}" list="destination-list-1" required>
             <datalist id="destination-list-1">
             ${createDestinationListTemplate(pointDestinations, currentDestination)}
             </datalist>
@@ -170,9 +170,9 @@ export default class EventEditView extends AbstractStatefulView {
   #datepickerFrom = null;
   #datepickerTo = null;
 
-  #editMode;
+  #editMode = EditType.EDITING;
 
-  constructor({ point = POINT_EMPTY, pointDestinations, pointOffers, onFormSubmit, onHideBtnClick, onDeleteClick, editMode = EditType.EDITING}) {
+  constructor({ point = POINT_EMPTY, pointDestinations, pointOffers, onFormSubmit, onHideBtnClick, onDeleteClick, editMode}) {
     super();
     this._state = point;
     this.#pointDestinations = pointDestinations;
