@@ -1,13 +1,8 @@
 import EventEditView from '../view/event-edit-view';
 import PointView from '../view/point-view';
 import { render, replace, remove } from '../framework/render';
-import { UpdateType, UserAction } from '../mocks/const';
+import { UpdateType, UserAction, MODE } from '../mocks/const';
 import { isBigDifference } from '../util/point';
-
-const MODE = {
-  DEFAULT: 'DEFAULT',
-  EDITING: 'EDITING',
-};
 
 export default class PointPresenter {
   #container = null;

@@ -168,12 +168,13 @@ export default class EventEditView extends AbstractStatefulView {
   #handleFormSubmit = null;
   #handleHideBtnClick = null;
   #handleDeleteClick = null;
+  #handleCancelBtnClick = null;
   #datepickerFrom = null;
   #datepickerTo = null;
 
   #editMode = EditType.EDITING;
 
-  constructor({ point = POINT_EMPTY, pointDestinations, pointOffers, onFormSubmit, onHideBtnClick, onDeleteClick, editMode}) {
+  constructor({ point = POINT_EMPTY, pointDestinations, pointOffers, onFormSubmit, onHideBtnClick, onDeleteClick, onCancelClick, editMode}) {
     super();
     this._setState(EventEditView.parsePointToState({point}));
     this.#pointDestinations = pointDestinations;
@@ -181,6 +182,7 @@ export default class EventEditView extends AbstractStatefulView {
     this.#handleFormSubmit = onFormSubmit;
     this.#handleHideBtnClick = onHideBtnClick;
     this.#handleDeleteClick = onDeleteClick;
+    this.#handleCancelBtnClick = onCancelClick;
     this.#editMode = editMode;
     this._restoreHandlers();
   }
@@ -211,18 +213,17 @@ export default class EventEditView extends AbstractStatefulView {
   };
 
   _restoreHandlers () {
-    if(this.#editMode === EditType.EDITING) {
-      this.element.querySelector('.event__rollup-btn')
-        .addEventListener('click', this.#hideBtnClickHandler);
+    // if(this.#editMode === EditType.EDITING) {
+    // this.element.querySelector('.event__rollup-btn')
+    //   .addEventListener('click', this.#hideBtnClickHandler);
 
-      this.element.querySelector('.event__reset-btn')
-        .addEventListener('click', this.#deleteBtnClickHandler);
-    }
-
-    if(this.#editMode === EditType.CREATING) {
-      this.element.querySelector('.event__reset-btn')
-        .addEventListener('click', this.#deleteBtnClickHandler);
-    }
+    // this.element.querySelector('.event__reset-btn')
+    //   .addEventListener('click', this.#deleteBtnClickHandler);
+    // }
+    // if(this.#editMode === EditType.CREATING) {
+    this.element.querySelector('.event__reset-btn')
+      .addEventListener('click', this.#cancelBtnClickHandler);
+    // }
 
     this.element.querySelector('.event')
       .addEventListener('submit', this.#formSubmitHandler);
@@ -255,6 +256,11 @@ export default class EventEditView extends AbstractStatefulView {
   #hideBtnClickHandler = (evt) => {
     evt.preventDefault();
     this.#handleHideBtnClick();
+  };
+
+  #cancelBtnClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleCancelBtnClick();
   };
 
 

@@ -1,6 +1,6 @@
 import {render, remove, RenderPosition } from '../framework/render.js';
 import EventEditView from '../view/event-edit-view.js';
-import { UserAction, UpdateType,EditType } from '../mocks/const.js';
+import { UserAction, UpdateType, EditType } from '../mocks/const.js';
 
 export default class NewPointPresenter {
   #container = null;
@@ -27,7 +27,7 @@ export default class NewPointPresenter {
     this.#pointNewComponent = new EventEditView({
       pointDestinations: this.#destinationsModel.get(),
       pointOffers: this.#offersModel.get(),
-      onResetClick: this.#resetClickHandler,
+      onCancelClick: this.#resetClickHandler,
       onFormSubmit: this.#formSubmitHandler,
       editMode: EditType.CREATING
     });

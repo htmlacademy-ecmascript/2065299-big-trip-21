@@ -110,6 +110,12 @@ const POINT_EMPTY = {
   type: DEFAULT_TYPE,
 };
 
+
+const MODE = {
+  DEFAULT: 'DEFAULT',
+  EDITING: 'EDITING',
+};
+
 export {
   POINT_COUNT,
   CITIES,
@@ -130,5 +136,6 @@ export {
   UserAction,
   NoPointText,
   EditType,
-  POINT_EMPTY
+  POINT_EMPTY,
+  MODE
 };
