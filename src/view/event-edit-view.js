@@ -3,6 +3,7 @@ import AbstractStatefulView from '../framework/view/abstract-stateful-view';
 import { EditType, TYPES, POINT_EMPTY } from '../mocks/const';
 import flatpickr from 'flatpickr';
 import { toCapitalize } from '../util/common';
+import he from 'he';
 
 import 'flatpickr/dist/flatpickr.min.css';
 
@@ -44,7 +45,7 @@ function createPriceTemplate(basePrice) {
         <span class="visually-hidden">${basePrice}</span>
         &euro;
       </label>
-      <input class="event__input  event__input--price" type="number" pattern="^[ 0-9]+$" id="event-price-1" type="text" name="event-price" value="${basePrice}">
+      <input class="event__input  event__input--price" type="number" pattern="^[ 0-9]+$" min="0" id="event-price-1" type="text" name="event-price" value="${he.encode(String(basePrice))}"required>
     </div>
   `);
 }
@@ -79,7 +80,7 @@ function createDestinationTemplate(isDestination, currentDestination) {
   ${isDestination || currentDestination ? /*html*/`
           <section class="event__section  event__section--destination">
             <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-            <p class="event__destination-description">${name} ${currentDestination.description}</p>
+            <p class="event__destination-description">${currentDestination.description}</p>
             <div class="event__photos-container">
             <div class="event__photos-tape">
               ${currentDestination.pictures
@@ -136,7 +137,7 @@ function createEventEditTemplate({ state, pointDestinations, pointOffers, editMo
             <label class="event__label  event__type-output" for="event-destination-1">
               ${type}
             </label>
-            <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${currentDestination ? currentDestination.name : ''}" list="destination-list-1" required>
+            <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${currentDestination ? he.encode(currentDestination.name) : ''}" list="destination-list-1" required>
             <datalist id="destination-list-1">
             ${createDestinationListTemplate(pointDestinations, currentDestination)}
             </datalist>
@@ -174,16 +175,14 @@ export default class EventEditView extends AbstractStatefulView {
 
   constructor({ point = POINT_EMPTY, pointDestinations, pointOffers, onFormSubmit, onHideBtnClick, onDeleteClick, editMode}) {
     super();
-    this._state = point;
+    this._setState(EventEditView.parsePointToState({point}));
     this.#pointDestinations = pointDestinations;
     this.#pointOffers = pointOffers;
     this.#handleFormSubmit = onFormSubmit;
     this.#handleHideBtnClick = onHideBtnClick;
     this.#handleDeleteClick = onDeleteClick;
-
-    this._setState(EventEditView.parsePointToState({point}));
-    this._restoreHandlers();
     this.#editMode = editMode;
+    this._restoreHandlers();
   }
 
   get template() {
@@ -211,25 +210,19 @@ export default class EventEditView extends AbstractStatefulView {
     }
   };
 
-  _restoreHandlers = () => {
-    // if(this.#editMode === EditType.EDITING) {
-    //   this.element.querySelector('.event__rollup-btn')
-    //     .addEventListener('click', this.#hideBtnClickHandler);
+  _restoreHandlers () {
+    if(this.#editMode === EditType.EDITING) {
+      this.element.querySelector('.event__rollup-btn')
+        .addEventListener('click', this.#hideBtnClickHandler);
 
-    //   this.element.querySelector('.event__reset-btn')
-    //     .addEventListener('click', this.#deleteBtnClickHandler);
-    // }
-    // if(this.#editMode === EditType.CREATING) {
-    //   this.element.querySelector('.event__reset-btn')
-    //     .addEventListener('click', this.#hideBtnClickHandler);
-    // }
+      this.element.querySelector('.event__reset-btn')
+        .addEventListener('click', this.#deleteBtnClickHandler);
+    }
 
-
-    this.element.querySelector('.event__rollup-btn')
-      .addEventListener('click', this.#hideBtnClickHandler);
-
-    this.element.querySelector('.event__reset-btn')
-      .addEventListener('click', this.#deleteBtnClickHandler);
+    if(this.#editMode === EditType.CREATING) {
+      this.element.querySelector('.event__reset-btn')
+        .addEventListener('click', this.#deleteBtnClickHandler);
+    }
 
     this.element.querySelector('.event')
       .addEventListener('submit', this.#formSubmitHandler);
@@ -247,7 +240,7 @@ export default class EventEditView extends AbstractStatefulView {
       .addEventListener('change', this.#priceChangeHandler);
 
     this.#setDatepickers();
-  };
+  }
 
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
