@@ -1,4 +1,4 @@
-import NewPointButtonVeiw from '../view/new-point-button-view';
+import NewPointButtonView from '../view/new-point-button-view';
 import {render} from '../framework/render.js';
 
 export default class NewPointButtonPresenter {
@@ -12,7 +12,7 @@ export default class NewPointButtonPresenter {
 
   init({onButtonClick}) {
     this.#handleButtonClick = onButtonClick;
-    this.#button = new NewPointButtonVeiw({onButtonClick: this.#buttonClickHandler});
+    this.#button = new NewPointButtonView({onButtonClick: this.#buttonClickHandler});
     render(this.#button, this.#container);
   }
 

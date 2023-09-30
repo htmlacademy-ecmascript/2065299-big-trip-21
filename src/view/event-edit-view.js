@@ -235,7 +235,7 @@ export default class EventEditView extends AbstractStatefulView {
       .addEventListener('submit', this.#formSubmitHandler);
 
     this.element.querySelector('.event__input--destination')
-      .addEventListener('change', this.#destionationChangeHandler);
+      .addEventListener('change', this.#destinationChangeHandler);
 
     this.element.querySelector('.event__type-group')
       .addEventListener('change', this.#typeChangeHandler);
@@ -275,7 +275,7 @@ export default class EventEditView extends AbstractStatefulView {
     });
   };
 
-  #destionationChangeHandler = (evt) => {
+  #destinationChangeHandler = (evt) => {
     const currentDestination = this.#pointDestinations.find((pointDestination) => pointDestination.name === toCapitalize(evt.target.value));
     const currentDestinationId = (currentDestination) ? currentDestination.id : this._state.point.destination;
 

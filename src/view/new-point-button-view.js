@@ -6,7 +6,7 @@ function createNewPointButtonTemplate () {
     `;
 }
 
-export default class NewPointButtonVeiw extends AbstractView {
+export default class NewPointButtonView extends AbstractView {
   #handleButtonClick = null;
 
   constructor({onButtonClick}) {
