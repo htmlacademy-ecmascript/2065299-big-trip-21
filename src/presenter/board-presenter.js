@@ -61,6 +61,7 @@ export default class BoardPresenter {
 
   #handleModeChange = () => {
     this.#pointPresenters.forEach((presenter) => presenter.resetView());
+    this.#newPointPresenter.destroy();
   };
 
 
