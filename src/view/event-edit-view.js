@@ -45,7 +45,7 @@ function createPriceTemplate(basePrice) {
         <span class="visually-hidden">${basePrice}</span>
         &euro;
       </label>
-      <input class="event__input  event__input--price" type="number" pattern="^[ 0-9]+$" min="0" id="event-price-1" type="text" name="event-price" value="${he.encode(String(basePrice))}"required>
+      <input class="event__input  event__input--price" type="number" pattern="^[ 0-9]+$" min="0" id="event-price-1" type="text" name="event-price" value="${he.encode(String(basePrice))}" required>
     </div>
   `);
 }
@@ -95,7 +95,7 @@ function createDestinationTemplate(isDestination, currentDestination) {
   `);
 }
 
-function createEventEditTemplate({ state, pointDestinations, pointOffers, editMode}) {
+function createEventEditTemplate({ state = POINT_EMPTY, pointDestinations, pointOffers, editMode}) {
   const {
     type,
     basePrice,
