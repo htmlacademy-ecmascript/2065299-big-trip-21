@@ -214,6 +214,7 @@ export default class EventEditView extends AbstractStatefulView {
 
   _restoreHandlers () {
     if(this.#editMode === EditType.EDITING) {
+
       this.element.querySelector('.event__rollup-btn')
         .addEventListener('click', this.#hideBtnClickHandler);
 

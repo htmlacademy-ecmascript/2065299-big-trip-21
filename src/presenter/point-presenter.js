@@ -1,7 +1,7 @@
 import EventEditView from '../view/event-edit-view';
 import PointView from '../view/point-view';
 import { render, replace, remove } from '../framework/render';
-import { UpdateType, UserAction, MODE } from '../mocks/const';
+import { UpdateType, UserAction, MODE, EditType } from '../mocks/const';
 import { isBigDifference } from '../util/point';
 
 export default class PointPresenter {
@@ -44,7 +44,8 @@ export default class PointPresenter {
       pointOffers: this.#offersModel.get(),
       onFormSubmit: this.#handleFormSubmit,
       onHideBtnClick: this.#handleHideBtnClick,
-      onDeleteClick: this.#handleDeleteClick
+      onDeleteClick: this.#handleDeleteClick,
+      editMode: EditType.EDITING
     });
 
     if (prevPointComponent === null || prevPointEditComponent === null) {
