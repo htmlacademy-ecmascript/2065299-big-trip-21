@@ -95,7 +95,7 @@ function createDestinationTemplate(isDestination, currentDestination) {
   `);
 }
 
-function createEventEditTemplate({ state = POINT_EMPTY, pointDestinations, pointOffers, editMode}) {
+function createEventEditTemplate({ state, pointDestinations, pointOffers, editMode}) {
   const {
     type,
     basePrice,
@@ -270,7 +270,7 @@ export default class EventEditView extends AbstractStatefulView {
       point: {
         ...this._state.point,
         type: evt.target.value,
-        offer: []
+        offers: []
       }
     });
   };
