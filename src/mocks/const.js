@@ -86,6 +86,7 @@ const UpdateType = {
   PATCH: 'PATCH',
   MINOR: 'MINOR',
   MAJOR: 'MAJOR',
+  INIT: 'INIT',
 };
 
 const NoPointText = {
@@ -116,6 +117,47 @@ const MODE = {
   EDITING: 'EDITING',
 };
 
+const Method = {
+  GET: 'GET',
+  PUT: 'PUT',
+  POST: 'POST',
+  DELETE: 'DELETE',
+};
+
+const adaptToClient = (point) => {
+  const adaptedPoint = {
+    ...point,
+    dateFrom: point['date_from'],
+    dateTo: point['date_to'],
+    basePrice: point['base_price'],
+    isFavorite: point['is_favorite'],
+  };
+
+  delete adaptedPoint['date_from'];
+  delete adaptedPoint['date_to'];
+  delete adaptedPoint['base_price'];
+  delete adaptedPoint['is_favorite'];
+
+  return adaptedPoint;
+};
+
+const adaptToServer = (point) => {
+  const adaptedPoint = {
+    ...point,
+    ['date_from']: new Date(point.dateFrom).toISOString(),
+    ['date_to']: new Date(point.dateTo).toISOString(),
+    ['base_price']: point.basePrice,
+    ['is_favorite']: point.isFavorite,
+  };
+
+  delete adaptedPoint.dateFrom;
+  delete adaptedPoint.dateTo;
+  delete adaptedPoint.basePrice;
+  delete adaptedPoint.isFavorite;
+
+  return adaptedPoint;
+};
+
 export {
   POINT_COUNT,
   CITIES,
@@ -137,5 +179,8 @@ export {
   NoPointText,
   EditType,
   POINT_EMPTY,
-  MODE
+  MODE,
+  Method,
+  adaptToClient,
+  adaptToServer
 };

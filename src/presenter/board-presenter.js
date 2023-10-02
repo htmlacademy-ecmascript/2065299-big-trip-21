@@ -7,10 +7,12 @@ import { SortTypes, UpdateType, UserAction, enabledSortType, FilterTypes } from 
 import { sortBy } from '../util/sort-by';
 import { filterBy } from '../util/filter-by';
 import NewPointPresenter from './new-point-presenter';
+import LoadingView from '../view/loading-view';
 
 export default class BoardPresenter {
   #eventListComponent = new EventsListView();
   #sortComponent = null;
+  #loadingComponent = new LoadingView();
   #noPointComponent = null;
   #boardContainer = null;
 
@@ -23,6 +25,7 @@ export default class BoardPresenter {
   #currentSortType = SortTypes.DAY;
   #pointPresenters = new Map();
   #isCreating = false;
+  #isLoading = true;
 
   constructor({boardContainer, destinationsModel, offersModel, pointsModel, filterModel, newPointButtonPresenter}) {
     this.#boardContainer = boardContainer;
@@ -102,6 +105,7 @@ export default class BoardPresenter {
 
   #clearBoard = ({resetSortType = false} = {}) => {
     this.#clearPoints();
+    remove(this.#loadingComponent);
     remove(this.#sortComponent);
     this.#sortComponent = null;
 
@@ -119,16 +123,31 @@ export default class BoardPresenter {
     }
   };
 
-  #handleViewAction = (actionType, updateType, update) => {
+  #handleViewAction = async (actionType, updateType, update) => {
     switch (actionType) {
       case UserAction.UPDATE_POINT:
-        this.#pointsModel.update(updateType, update);
+        this.#pointPresenters.get(update.id).setSaving();
+        try {
+          await this.#pointsModel.update(updateType, update);
+        } catch(err) {
+          this.#pointPresenters.get(update.id).setAborting();
+        }
         break;
       case UserAction.CREATE_POINT:
-        this.#pointsModel.add(updateType, update);
+        this.#newPointPresenter.setSaving();
+        try {
+          await this.#pointsModel.add(updateType, update);
+        } catch(err) {
+          this.#pointPresenters.get(update.id).setAborting();
+        }
         break;
       case UserAction.DELETE_POINT:
-        this.#pointsModel.delete(updateType, update);
+        this.#pointPresenters.get(update.id).setDeleting();
+        try {
+          await this.#pointsModel.delete(updateType, update);
+        } catch(err) {
+          this.#pointPresenters.get(update.id).setAborting();
+        }
         break;
     }
   };
@@ -146,6 +165,11 @@ export default class BoardPresenter {
         this.#clearBoard({resetSortType: true});
         this.#renderBoard();
         break;
+      case UpdateType.INIT:
+        this.#isLoading = false;
+        remove(this.#loadingComponent);
+        this.#renderBoard();
+        break;
     }
   };
 
@@ -159,6 +183,10 @@ export default class BoardPresenter {
 
   #renderPointsContainer() {
     render(this.#eventListComponent, this.#boardContainer);
+  }
+
+  #renderLoading() {
+    render(this.#loadingComponent, this.#boardContainer);
   }
 
   #renderPoints() {
@@ -182,10 +210,19 @@ export default class BoardPresenter {
   }
 
   #renderBoard() {
-    if(this.points.length === 0 && !this.#isCreating) {
+    if (this.#isLoading) {
+      this.#newPointButtonPresenter.disableButton();
+      this.#renderLoading();
+      return;
+    }
+
+    if (this.points.length === 0 && !this.#isCreating) {
+      this.#newPointButtonPresenter.enableButton();
       this.#renderNoPoint();
       return;
     }
+
+    this.#newPointButtonPresenter.enableButton();
 
     this.#renderSort();
     this.#renderPointsContainer();
