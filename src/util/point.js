@@ -62,7 +62,8 @@ function formatToTime(date) {
 }
 
 function formatToFullDate(date) {
-  return dayjs(date).format(FULL_DATE_FORMAT);
+  return date === null ? '' : dayjs(date).format(FULL_DATE_FORMAT);
+
 }
 
 function isPointFuture(point) {
