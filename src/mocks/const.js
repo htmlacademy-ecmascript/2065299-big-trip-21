@@ -158,6 +158,11 @@ const adaptToServer = (point) => {
   return adaptedPoint;
 };
 
+const TimeLimit = {
+  LOWER_LIMIT: 350,
+  UPPER_LIMIT: 1000,
+};
+
 export {
   POINT_COUNT,
   CITIES,
@@ -182,5 +187,6 @@ export {
   MODE,
   Method,
   adaptToClient,
-  adaptToServer
+  adaptToServer,
+  TimeLimit
 };

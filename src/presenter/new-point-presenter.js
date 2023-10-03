@@ -40,11 +40,10 @@ export default class NewPointPresenter {
     if (!this.#pointNewComponent) {
       return;
     }
+    this.#handleDestroy({isCanceled});
     remove(this.#pointNewComponent);
     this.#pointNewComponent = null;
     document.removeEventListener('keydown', this.#escKeyDownHandler);
-
-    this.#handleDestroy({isCanceled});
   }
 
   setSaving = () => {

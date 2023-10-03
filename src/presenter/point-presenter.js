@@ -146,7 +146,6 @@ export default class PointPresenter {
       UserAction.UPDATE_POINT, isMinor ? UpdateType.MINOR : UpdateType.PATCH,
       updatedPoint
     );
-    this.#replaceFormToPoint();
   };
 
   #handleHideBtnClick = () => {

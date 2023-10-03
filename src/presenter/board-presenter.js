@@ -1,9 +1,10 @@
 import EventsListView from '../view/events-list-view';
+import UiBlocker from '../framework/ui-blocker/ui-blocker.js';
 import SortView from '../view/sort-view';
 import NoPointView from '../view/no-point-view';
 import PointPresenter from './point-presenter';
 import { render, RenderPosition, replace, remove } from '../framework/render';
-import { SortTypes, UpdateType, UserAction, enabledSortType, FilterTypes } from '../mocks/const';
+import { SortTypes, UpdateType, UserAction, enabledSortType, FilterTypes, TimeLimit } from '../mocks/const';
 import { sortBy } from '../util/sort-by';
 import { filterBy } from '../util/filter-by';
 import NewPointPresenter from './new-point-presenter';
@@ -26,6 +27,10 @@ export default class BoardPresenter {
   #pointPresenters = new Map();
   #isCreating = false;
   #isLoading = true;
+  #uiBlocker = new UiBlocker({
+    lowerLimit: TimeLimit.LOWER_LIMIT,
+    upperLimit: TimeLimit.UPPER_LIMIT,
+  });
 
   constructor({boardContainer, destinationsModel, offersModel, pointsModel, filterModel, newPointButtonPresenter}) {
     this.#boardContainer = boardContainer;
@@ -124,6 +129,8 @@ export default class BoardPresenter {
   };
 
   #handleViewAction = async (actionType, updateType, update) => {
+    this.#uiBlocker.block();
+
     switch (actionType) {
       case UserAction.UPDATE_POINT:
         this.#pointPresenters.get(update.id).setSaving();
@@ -138,7 +145,7 @@ export default class BoardPresenter {
         try {
           await this.#pointsModel.add(updateType, update);
         } catch(err) {
-          this.#pointPresenters.get(update.id).setAborting();
+          this.#newPointPresenter.setAborting();
         }
         break;
       case UserAction.DELETE_POINT:
@@ -150,6 +157,7 @@ export default class BoardPresenter {
         }
         break;
     }
+    this.#uiBlocker.unblock();
   };
 
   #modelEventHandler = (updateType, data) => {

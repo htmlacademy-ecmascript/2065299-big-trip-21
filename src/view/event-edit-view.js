@@ -23,18 +23,14 @@ function createDestinationListTemplate (pointDestinations) {
 }
 
 function createDateTemplate(dateFrom,
-  dateTo, isCreating) {
+  dateTo) {
   return (/*html*/`
     <div class="event__field-group  event__field-group--time">
       <label class="visually-hidden" for="event-start-time-1">From</label>
-      <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${isCreating ? '' : formatToFullDate(
-      dateFrom
-    )}" required>
+      <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${formatToFullDate(dateFrom)}" required>
       &mdash;
       <label class="visually-hidden" for="event-end-time-1">To</label>
-      <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${isCreating ? '' : formatToFullDate(
-      dateTo
-    )}" required>
+      <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${formatToFullDate(dateTo)}" required>
     </div>`);
 }
 
@@ -45,7 +41,7 @@ function createPriceTemplate(basePrice) {
         <span class="visually-hidden">${basePrice}</span>
         &euro;
       </label>
-      <input class="event__input  event__input--price" type="number" pattern="^[ 0-9]+$" min="0" id="event-price-1" type="text" name="event-price" value="${he.encode(String(basePrice))}" required>
+      <input class="event__input  event__input--price" type="number" pattern="^[ 0-9]+$" min="1" max="100000" id="event-price-1" type="text" name="event-price" value="${he.encode(String(basePrice))}" required>
     </div>
   `);
 }
@@ -289,15 +285,17 @@ export default class EventEditView extends AbstractStatefulView {
   };
 
   #destinationChangeHandler = (evt) => {
-    const currentDestination = this.#pointDestinations.find((pointDestination) => pointDestination.name === toCapitalize(evt.target.value));
-    const currentDestinationId = (currentDestination) ? currentDestination.id : this._state.point.destination;
+    if (evt.target.value) {
+      const currentDestination = this.#pointDestinations.find((pointDestination) => pointDestination.name === toCapitalize(evt.target.value));
+      const currentDestinationId = (currentDestination) ? currentDestination.id : this._state.point.destination;
 
-    this.updateElement({
-      point: {
-        ...this._state.point,
-        destination: currentDestinationId
-      }
-    });
+      this.updateElement({
+        point: {
+          ...this._state.point,
+          destination: currentDestinationId
+        }
+      });
+    }
   };
 
   #offerChangeHandler = () => {
