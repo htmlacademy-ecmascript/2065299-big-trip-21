@@ -272,16 +272,17 @@ export default class EventEditView extends AbstractStatefulView {
   };
 
   #destinationChangeHandler = (evt) => {
-    const currentDestination = this.#pointDestinations.find((pointDestination) => pointDestination.name === toCapitalize(evt.target.value));
-    const currentDestinationId = (currentDestination) ? currentDestination.id : this._state.point.destination;
+    if (evt.target.value) {
+      const currentDestination = this.#pointDestinations.find((pointDestination) => pointDestination.name === toCapitalize(evt.target.value));
+      const currentDestinationId = (currentDestination) ? currentDestination.id : this._state.point.destination;
 
-    this.updateElement({
-      point: {
-        ...this._state.point,
-        destination: currentDestinationId
-      }
-    });
-
+      this.updateElement({
+        point: {
+          ...this._state.point,
+          destination: currentDestinationId
+        }
+      });
+    }
   };
 
   #offerChangeHandler = () => {
