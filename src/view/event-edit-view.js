@@ -23,25 +23,25 @@ function createDestinationListTemplate (pointDestinations) {
 }
 
 function createDateTemplate(dateFrom,
-  dateTo) {
+  dateTo, isDisabled) {
   return (/*html*/`
     <div class="event__field-group  event__field-group--time">
       <label class="visually-hidden" for="event-start-time-1">From</label>
-      <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${formatToFullDate(dateFrom)}" required>
+      <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${formatToFullDate(dateFrom)}" required ${isDisabled ? 'disabled' : ''}>
       &mdash;
       <label class="visually-hidden" for="event-end-time-1">To</label>
-      <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${formatToFullDate(dateTo)}" required>
+      <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${formatToFullDate(dateTo)}" required ${isDisabled ? 'disabled' : ''}>
     </div>`);
 }
 
-function createPriceTemplate(basePrice) {
+function createPriceTemplate(basePrice, isDisabled) {
   return (/*html*/ `
     <div class="event__field-group  event__field-group--price">
       <label class="event__label" for="event-price-1">
         <span class="visually-hidden">${basePrice}</span>
         &euro;
       </label>
-      <input class="event__input  event__input--price" type="number" pattern="^[ 0-9]+$" min="1" max="100000" id="event-price-1" type="text" name="event-price" value="${he.encode(String(basePrice))}" required>
+      <input class="event__input  event__input--price" type="number" pattern="^[ 0-9]+$" min="1" max="100000" id="event-price-1" type="text" name="event-price" value="${he.encode(String(basePrice))}" required ${isDisabled ? 'disabled' : ''}>
     </div>
   `);
 }
@@ -143,7 +143,7 @@ function createEventEditTemplate({ state, pointDestinations, pointOffers, editMo
               <span class="visually-hidden">Choose event type</span>
               <img class="event__type-icon" width="17" height="17" src="img/icons/${type.toLowerCase()}.png" alt="Event type icon">
             </label>
-            <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
+            <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox" ${isDisabled ? 'disabled' : ''}>
             <div class="event__type-list">
               <fieldset class="event__type-group">
                 <legend class="visually-hidden">Event type</legend>
@@ -156,14 +156,14 @@ function createEventEditTemplate({ state, pointDestinations, pointOffers, editMo
             <label class="event__label  event__type-output" for="event-destination-1">
               ${type}
             </label>
-            <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${currentDestination ? he.encode(currentDestination.name) : ''}" list="destination-list-1" required>
+            <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${currentDestination ? he.encode(currentDestination.name) : ''}" list="destination-list-1" required ${isDisabled ? 'disabled' : ''}>
             <datalist id="destination-list-1">
             ${createDestinationListTemplate(pointDestinations, currentDestination)}
             </datalist>
           </div>
 
-          ${createDateTemplate(dateFrom, dateTo, isCreating)}
-          ${createPriceTemplate(basePrice)}
+          ${createDateTemplate(dateFrom, dateTo, isDisabled)}
+          ${createPriceTemplate(basePrice, isDisabled)}
           
           <button class="event__save-btn  btn  btn--blue" type="submit" ${isDisabled ? 'disabled' : ''}>${isSaving ? 'Saving...' : 'Save'}</button>
           ${createButtonTemplate(isCreating, isDeleting, isDisabled)}

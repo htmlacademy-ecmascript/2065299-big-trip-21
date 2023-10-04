@@ -9,7 +9,7 @@ import FilterModel from './model/filter-model';
 import NewPointButtonPresenter from './presenter/new-point-button-presenter';
 import PointsApiService from './service/point-api-service';
 
-const AUTHORIZATION = 'Basic b423sf2sw2e35f76';
+const AUTHORIZATION = 'Basic b42ed462w2f76';
 const END_POINT = 'https://21.objects.pages.academy/big-trip';
 
 const tripInfoElement = document.querySelector('.trip-main');
