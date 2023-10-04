@@ -2,6 +2,7 @@ import Observable from '../framework/observable';
 import { updateItem } from '../util/common';
 import { UpdateType, adaptToClient, adaptToServer } from '../mocks/const';
 
+
 export default class PointsModel extends Observable {
   #service = null;
   #points = [];

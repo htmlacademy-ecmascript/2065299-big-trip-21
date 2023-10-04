@@ -9,11 +9,13 @@ import { sortBy } from '../util/sort-by';
 import { filterBy } from '../util/filter-by';
 import NewPointPresenter from './new-point-presenter';
 import LoadingView from '../view/loading-view';
+// import FailedLoadingView from '../view/failed-loading-view';
 
 export default class BoardPresenter {
   #eventListComponent = new EventsListView();
   #sortComponent = null;
   #loadingComponent = new LoadingView();
+  // #failedLoadingComponent = new FailedLoadingView();
   #noPointComponent = null;
   #boardContainer = null;
 
@@ -196,6 +198,10 @@ export default class BoardPresenter {
   #renderLoading() {
     render(this.#loadingComponent, this.#boardContainer);
   }
+
+  // #renderFailedLoading() {
+  //   render(this.#failedLoadingComponent, this.#boardContainer);
+  // }
 
   #renderPoints() {
     this.points.forEach((point) => {

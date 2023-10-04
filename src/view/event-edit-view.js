@@ -71,35 +71,41 @@ function createOffersTemplate(isOffers, offersByType, offers) {
   `);
 }
 
-function createDestinationTemplate(isDestination, currentDestination) {
+function createDestinationTemplate(isDescription, isPicture, currentDestination) {
   return (/*html*/`
-  ${isDestination || currentDestination ? /*html*/`
+  ${isDescription ? /*html*/`
           <section class="event__section  event__section--destination">
             <h3 class="event__section-title  event__section-title--destination">Destination</h3>
             <p class="event__destination-description">${currentDestination.description}</p>
-            <div class="event__photos-container">
-            <div class="event__photos-tape">
-              ${currentDestination.pictures
+            ${createPictureTemplate(isPicture, currentDestination)}
+          </section>` : ' '}
+  `);
+}
+
+function createPictureTemplate (isPicture, currentDestination) {
+  return (/*html*/` 
+    ${isPicture ? /*html*/` <div class="event__photos-container">
+    <div class="event__photos-tape">
+      ${currentDestination.pictures
       .map(
-        (picture) => /*html*/ `
-                <img class="event__photo" src="${picture.src}" alt="${picture.description}">`
+        (picture) => /*html*/`
+        <img class="event__photo" src="${picture.src}" alt="${picture.description}">`
       )
       .join('')}
-              </div>
-            </div>
-          </section>` : ' '}
+      </div>
+    </div>` : ''}
   `);
 }
 
 function createButtonTemplate(isCreating, isDeleting, isDisabled) {
   if (isCreating) {
     return /*html*/`
-      <button class="event__reset-btn" type="reset">Cancel</button>
+      <button class="event__reset-btn" type="reset" ${isDisabled ? 'disabled' : ''}>Cancel</button>
     `;
   }
   return /*html*/`
     <button class="event__reset-btn" type="reset" ${isDisabled ? 'disabled' : ''}>${isDeleting ? 'Deleting...' : 'Delete'}</button>
-    <button class="event__rollup-btn" type="button"><span class="visually-hidden">Open event</span></button>
+    <button class="event__rollup-btn" type="button" ${isDisabled ? 'disabled' : ''}><span class="visually-hidden">Open event</span></button>
     `;
 }
 
@@ -125,7 +131,8 @@ function createEventEditTemplate({ state, pointDestinations, pointOffers, editMo
 
 
   const isOffers = offersByType.length > 0;
-  const isDestination = currentDestination?.pictures.length > 0 || currentDestination?.description;
+  const isDescription = currentDestination?.description;
+  const isPicture = currentDestination?.pictures.length > 0;
 
   return /*html*/ `
     <li class="trip-events__item">
@@ -163,7 +170,7 @@ function createEventEditTemplate({ state, pointDestinations, pointOffers, editMo
         </header>
         <section class="event__details">
           ${createOffersTemplate(isOffers, offersByType, offers)}
-          ${createDestinationTemplate(isDestination, currentDestination)}
+          ${createDestinationTemplate(isDescription, isPicture, currentDestination)}
         </section>
       </form>
     </li>
