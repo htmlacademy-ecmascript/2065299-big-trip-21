@@ -98,7 +98,7 @@ function createButtonTemplate(isCreating, isDeleting, isDisabled) {
     `;
   }
   return /*html*/`
-    <button class="event__reset-btn" type="reset" ${isDisabled ? 'disabled' : ''}>${isDeleting ? 'Deleting' : 'Delete'}</button>
+    <button class="event__reset-btn" type="reset" ${isDisabled ? 'disabled' : ''}>${isDeleting ? 'Deleting...' : 'Delete'}</button>
     <button class="event__rollup-btn" type="button"><span class="visually-hidden">Open event</span></button>
     `;
 }
@@ -158,7 +158,7 @@ function createEventEditTemplate({ state, pointDestinations, pointOffers, editMo
           ${createDateTemplate(dateFrom, dateTo, isCreating)}
           ${createPriceTemplate(basePrice)}
           
-          <button class="event__save-btn  btn  btn--blue" type="submit" ${isDisabled ? 'disabled' : ''}>${isSaving ? 'Saving' : 'Save'}</button>
+          <button class="event__save-btn  btn  btn--blue" type="submit" ${isDisabled ? 'disabled' : ''}>${isSaving ? 'Saving...' : 'Save'}</button>
           ${createButtonTemplate(isCreating, isDeleting, isDisabled)}
         </header>
         <section class="event__details">
