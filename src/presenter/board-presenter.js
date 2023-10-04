@@ -218,7 +218,6 @@ export default class BoardPresenter {
     this.#pointPresenters.forEach((presenter) => presenter.destroy());
     this.#pointPresenters.clear();
     remove(this.#noPointComponent);
-    // this.#newPointPresenter.destroy();
   }
 
   #renderNoPoint() {
