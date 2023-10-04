@@ -4,7 +4,7 @@ import SortView from '../view/sort-view';
 import NoPointView from '../view/no-point-view';
 import PointPresenter from './point-presenter';
 import { render, RenderPosition, replace, remove } from '../framework/render';
-import { SortTypes, UpdateType, UserAction, enabledSortType, FilterTypes, TimeLimit } from '../mocks/const';
+import { SortTypes, UpdateType, UserAction, enabledSortType, FilterTypes, TimeLimit } from '../util/const';
 import { sortBy } from '../util/sort-by';
 import { filterBy } from '../util/filter-by';
 import NewPointPresenter from './new-point-presenter';

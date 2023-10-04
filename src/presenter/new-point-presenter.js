@@ -1,6 +1,6 @@
 import {render, remove, RenderPosition } from '../framework/render.js';
 import EventEditView from '../view/event-edit-view.js';
-import { UserAction, UpdateType, EditType } from '../mocks/const.js';
+import { UserAction, UpdateType, EditType } from '../util/const.js';
 
 export default class NewPointPresenter {
   #container = null;

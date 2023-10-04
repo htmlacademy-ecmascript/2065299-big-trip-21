@@ -1,8 +1,7 @@
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { DATE_FORMAT, TIME_FORMAT, FULL_DATE_FORMAT } from '../mocks/const';
-import { getRandomInRange } from './common';
+import { DATE_FORMAT, TIME_FORMAT, FULL_DATE_FORMAT } from '../util/const';
 
 dayjs.extend(duration);
 dayjs.extend(relativeTime);
@@ -34,23 +33,6 @@ function getPointDuration(dateFrom, dateTo) {
   }
 
   return pointDuration;
-}
-
-const startDay = dayjs()
-  .subtract(getRandomInRange(0, 60), 'minute')
-  .subtract(getRandomInRange(0, 24), 'hour')
-  .subtract(getRandomInRange(0, 3), 'day');
-
-function generateDateFrom() {
-  return startDay.subtract(getRandomInRange(0, 24), 'hour').toDate();
-}
-
-function generateDateTo() {
-  return startDay
-    .add(getRandomInRange(0, 60), 'minute')
-    .add(getRandomInRange(0, 23), 'hour')
-    .add(getRandomInRange(0, 5), 'day')
-    .toDate();
 }
 
 function formatToDate(date) {
@@ -103,8 +85,6 @@ function isBigDifference(pointA, pointB) {
 }
 
 export {
-  generateDateTo,
-  generateDateFrom,
   formatToDate,
   formatToFullDate,
   formatToTime,

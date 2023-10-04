@@ -1,7 +1,7 @@
 import FilterView from '../view/filter-view';
 import { filterBy } from '../util/filter-by';
 import { render, remove, replace } from '../framework/render';
-import { UpdateType } from '../mocks/const';
+import { UpdateType } from '../util/const';
 
 export default class FilterPresenter {
   #container = null;
