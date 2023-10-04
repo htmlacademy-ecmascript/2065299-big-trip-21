@@ -1,7 +1,7 @@
 import EventEditView from '../view/event-edit-view';
 import PointView from '../view/point-view';
 import { render, replace, remove } from '../framework/render';
-import { UpdateType, UserAction, MODE, EditType } from '../util/const';
+import { UpdateType, UserAction, Mode, EditType } from '../util/const';
 import { isBigDifference } from '../util/point';
 
 export default class PointPresenter {
@@ -14,7 +14,7 @@ export default class PointPresenter {
   #pointComponent = null;
   #editPointComponent = null;
   #point = null;
-  #mode = MODE.DEFAULT;
+  #mode = Mode.DEFAULT;
 
   constructor({container, destinationsModel, offersModel, onDataChange, onModeChange }) {
     this.#container = container;
@@ -53,11 +53,11 @@ export default class PointPresenter {
       return;
     }
 
-    if (this.#mode === MODE.DEFAULT) {
+    if (this.#mode === Mode.DEFAULT) {
       replace(this.#pointComponent, prevPointComponent);
     }
 
-    if (this.#mode === MODE.EDITING) {
+    if (this.#mode === Mode.EDITING) {
       replace(this.#editPointComponent, prevPointEditComponent);
     }
 
@@ -71,14 +71,14 @@ export default class PointPresenter {
   }
 
   resetView() {
-    if (this.#mode !== MODE.DEFAULT) {
+    if (this.#mode !== Mode.DEFAULT) {
       this.#editPointComponent.reset(this.#point);
       this.#replaceFormToPoint();
     }
   }
 
   setSaving = () => {
-    if(this.#mode === MODE.EDITING) {
+    if(this.#mode === Mode.EDITING) {
       this.#editPointComponent.updateElement({
         isDisabled: true,
         isSaving: true,
@@ -87,7 +87,7 @@ export default class PointPresenter {
   };
 
   setDeleting = () => {
-    if(this.#mode === MODE.EDITING) {
+    if(this.#mode === Mode.EDITING) {
       this.#editPointComponent.updateElement({
         isDisabled: true,
         isDeleting: true,
@@ -96,11 +96,11 @@ export default class PointPresenter {
   };
 
   setAborting = () => {
-    if(this.#mode === MODE.DEFAULT) {
+    if(this.#mode === Mode.DEFAULT) {
       this.#pointComponent.shake();
       return;
     }
-    if(this.#mode === MODE.EDITING) {
+    if(this.#mode === Mode.EDITING) {
       const resetFormState = () => {
         this.#editPointComponent.updateElement({
           isDisabled: false,
@@ -116,12 +116,12 @@ export default class PointPresenter {
   #replacePointToForm() {
     replace(this.#editPointComponent, this.#pointComponent);
     this.#handleModeChange();
-    this.#mode = MODE.EDITING;
+    this.#mode = Mode.EDITING;
   }
 
   #replaceFormToPoint() {
     replace(this.#pointComponent, this.#editPointComponent);
-    this.#mode = MODE.DEFAULT;
+    this.#mode = Mode.DEFAULT;
     document.removeEventListener('keydown', this.#escKeyDownHandler);
   }
 
