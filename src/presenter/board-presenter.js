@@ -183,7 +183,6 @@ export default class BoardPresenter {
       case UpdateType.ERROR:
         this.#isLoading = false;
         remove(this.#loadingComponent);
-        // this.#renderBoard();
         this.#renderFailedLoading();
         break;
     }
