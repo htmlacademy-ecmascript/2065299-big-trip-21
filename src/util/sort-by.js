@@ -1,4 +1,4 @@
-import { SortTypes } from '../mocks/const';
+import { SortTypes } from '../util/const';
 import { sortPointsByDate, sortPointsByTime, sortPointsByPrice } from './point';
 
 const sortBy = {

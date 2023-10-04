@@ -1,41 +1,3 @@
-const POINT_COUNT = 8;
-const OFFER_COUNT = 6;
-const DESTINATION_COUNT = 9;
-const PICTURE_COUNT = 8;
-
-const CITIES = [
-  'Chamonix',
-  'Amsterdam',
-  'Geneva',
-  'Moscow',
-  'Berlin',
-  'London',
-  'Tokio',
-  'Madrid',
-  'Barcelona',
-];
-
-const DESCRIPTION = [
-  'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-  'Cras aliquet varius magna, non porta ligula feugiat eget.',
-  'Fusce tristique felis at fermentum pharetra.',
-  'Aliquam id orci ut lectus varius viverra.',
-  'Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante.',
-];
-
-const OFFERS = [
-  'Add luggage',
-  'Switch to comfort',
-  'Add meal',
-  'Choose seats',
-  'Travel by train',
-];
-
-const PRICE = {
-  MIN: 1,
-  MAX: 1000,
-};
-
 const TYPES = [
   'Taxi',
   'Bus',
@@ -47,7 +9,24 @@ const TYPES = [
   'Sightseeing',
   'Restaurant',
 ];
+
+const EditType = {
+  EDITING: 'EDITING',
+  CREATING: 'CREATING',
+};
+
 const DEFAULT_TYPE = 'flight';
+
+const POINT_EMPTY = {
+  basePrice: 0,
+  dateFrom: null,
+  dateTo: null,
+  destination: null,
+  isFavorite: false,
+  offers: [],
+  type: DEFAULT_TYPE,
+};
+
 
 const DATE_FORMAT = 'MMM DD';
 const TIME_FORMAT = 'HH:mm';
@@ -95,21 +74,6 @@ const NoPointText = {
   FUTURE : 'There are no future events now',
   PRESENT : 'There are no present events now',
   PAST : 'There are no past events now',
-};
-
-const EditType = {
-  EDITING: 'EDITING',
-  CREATING: 'CREATING',
-};
-
-const POINT_EMPTY = {
-  basePrice: 0,
-  dateFrom: null,
-  dateTo: null,
-  destination: null,
-  isFavorite: false,
-  offers: [],
-  type: DEFAULT_TYPE,
 };
 
 
@@ -165,18 +129,10 @@ const TimeLimit = {
 };
 
 export {
-  POINT_COUNT,
-  CITIES,
-  DESCRIPTION,
-  PRICE,
   TYPES,
-  OFFER_COUNT,
   DATE_FORMAT,
   TIME_FORMAT,
   FULL_DATE_FORMAT,
-  PICTURE_COUNT,
-  OFFERS,
-  DESTINATION_COUNT,
   FilterTypes,
   SortTypes,
   enabledSortType,
@@ -191,3 +147,4 @@ export {
   adaptToServer,
   TimeLimit
 };
+

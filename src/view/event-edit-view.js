@@ -1,6 +1,6 @@
 import { formatToFullDate } from '../util/point';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view';
-import { EditType, TYPES, POINT_EMPTY } from '../mocks/const';
+import { EditType, TYPES, POINT_EMPTY } from '../util/const';
 import flatpickr from 'flatpickr';
 import { toCapitalize } from '../util/common';
 import he from 'he';

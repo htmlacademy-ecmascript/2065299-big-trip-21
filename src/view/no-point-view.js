@@ -1,5 +1,5 @@
 import AbstractView from '../framework/view/abstract-view';
-import { NoPointText } from '../mocks/const';
+import { NoPointText } from '../util/const';
 
 function createNoPointTemplate({text}) {
   return /*html*/ `
