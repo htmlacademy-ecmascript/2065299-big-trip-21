@@ -4,7 +4,6 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import { DATE_FORMAT, TIME_FORMAT, FULL_DATE_FORMAT } from '../mocks/const';
 import { getRandomInRange } from './common';
 
-
 dayjs.extend(duration);
 dayjs.extend(relativeTime);
 
@@ -37,14 +36,21 @@ function getPointDuration(dateFrom, dateTo) {
   return pointDuration;
 }
 
-const startDay = dayjs().subtract(getRandomInRange(0, 60), 'minute').subtract(getRandomInRange(0, 24), 'hour').subtract(getRandomInRange(0, 3), 'day');
+const startDay = dayjs()
+  .subtract(getRandomInRange(0, 60), 'minute')
+  .subtract(getRandomInRange(0, 24), 'hour')
+  .subtract(getRandomInRange(0, 3), 'day');
 
 function generateDateFrom() {
   return startDay.subtract(getRandomInRange(0, 24), 'hour').toDate();
 }
 
 function generateDateTo() {
-  return startDay.add(getRandomInRange(0, 60), 'minute').add(getRandomInRange(0, 23), 'hour').add(getRandomInRange(0, 5), 'day').toDate();
+  return startDay
+    .add(getRandomInRange(0, 60), 'minute')
+    .add(getRandomInRange(0, 23), 'hour')
+    .add(getRandomInRange(0, 5), 'day')
+    .toDate();
 }
 
 function formatToDate(date) {
@@ -56,7 +62,8 @@ function formatToTime(date) {
 }
 
 function formatToFullDate(date) {
-  return dayjs(date).format(FULL_DATE_FORMAT);
+  return date === null ? '' : dayjs(date).format(FULL_DATE_FORMAT);
+
 }
 
 function isPointFuture(point) {
@@ -71,16 +78,42 @@ function isPointPresent(point) {
   return dayjs().isBefore(point.dateTo) && dayjs().isAfter(point.dateFrom);
 }
 
-function sortPointsByDate (a, b) {
+function sortPointsByDate(a, b) {
   return dayjs(a.dateFrom) > dayjs(b.dateFrom) ? 1 : -1;
 }
 
-function sortPointsByTime (a, b) {
-  return dayjs(a.dateFrom).diff(dayjs(a.dateTo)) > dayjs(b.dateFrom).diff(dayjs(b.dateTo)) ? 1 : -1;
+function sortPointsByTime(a, b) {
+  return dayjs(a.dateFrom).diff(dayjs(a.dateTo)) >
+    dayjs(b.dateFrom).diff(dayjs(b.dateTo))
+    ? 1
+    : -1;
 }
 
-function sortPointsByPrice (a, b) {
+function sortPointsByPrice(a, b) {
   return a.basePrice > b.basePrice ? -1 : 1;
 }
 
-export { generateDateTo, generateDateFrom, formatToDate, formatToFullDate, formatToTime, getPointDuration, isPointFuture, isPointPast, isPointPresent, sortPointsByDate, sortPointsByPrice, sortPointsByTime };
+function isBigDifference(pointA, pointB) {
+  return (
+    pointA.dateFrom !== pointB.dateFrom ||
+    pointA.basePrice !== pointB.basePrice ||
+    getPointDuration(pointA.dateFrom, pointA.dateTo) !==
+    getPointDuration(pointB.dateFrom, pointB.dateTo)
+  );
+}
+
+export {
+  generateDateTo,
+  generateDateFrom,
+  formatToDate,
+  formatToFullDate,
+  formatToTime,
+  getPointDuration,
+  isPointFuture,
+  isPointPast,
+  isPointPresent,
+  sortPointsByDate,
+  sortPointsByPrice,
+  sortPointsByTime,
+  isBigDifference
+};
