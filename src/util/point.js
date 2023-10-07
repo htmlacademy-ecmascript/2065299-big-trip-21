@@ -49,15 +49,15 @@ function formatToFullDate(date) {
 }
 
 function isPointFuture(point) {
-  return dayjs().isBefore(point.dateFrom);
+  return dayjs().isBefore(point.dateFrom, 'day');
 }
 
 function isPointPast(point) {
-  return dayjs().isAfter(point.dateTo);
+  return dayjs().isAfter(point.dateTo, 'day');
 }
 
 function isPointPresent(point) {
-  return dayjs().isBefore(point.dateTo) && dayjs().isAfter(point.dateFrom);
+  return dayjs().isBefore(point.dateTo, 'day') && dayjs().isAfter(point.dateFrom, 'day') || dayjs().isSame(point.dateTo, 'day') || dayjs().isSame(point.dateFrom, 'day');
 }
 
 function sortPointsByDate(a, b) {
