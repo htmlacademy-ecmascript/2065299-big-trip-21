@@ -57,7 +57,7 @@ function isPointPast(point) {
 }
 
 function isPointPresent(point) {
-  return dayjs().isBefore(point.dateTo, 'day') && dayjs().isAfter(point.dateFrom, 'day') || dayjs().isSame(point.dateTo) || dayjs().isSame(point.dateFrom);
+  return dayjs().isBefore(point.dateTo, 'day') && dayjs().isAfter(point.dateFrom, 'day') || dayjs().isSame(point.dateTo, 'day') || dayjs().isSame(point.dateFrom, 'day');
 }
 
 function sortPointsByDate(a, b) {
